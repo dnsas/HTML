@@ -1,0 +1,140 @@
+/* Importation de la police Poppins */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* Body avec fond léger */
+
+body {
+    background-color: black;
+    background-size: cover;
+    padding: 20px;
+    color: white;
+}
+
+
+/* Titre principal */
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #fff;
+    text-shadow: 0 0 5px black;
+}
+
+
+/* Formulaire */
+
+.formulairePourBDProf {
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* Label */
+
+.formulairePourBDProf label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+
+/* Select */
+
+.formulairePourBDProf select {
+    padding: 12px 15px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    outline: none;
+    font-size: 16px;
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.formulairePourBDProf select:focus {
+    border-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Bouton du formulaire */
+
+.formulairePourBDProf button {
+    padding: 12px 15px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.formulairePourBDProf button:hover {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: white;
+}
+
+
+/* Tableau de résultats */
+
+.affichageBD table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.affichageBD th,
+.affichageBD td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.affichageBD th {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Zone des erreurs */
+
+.affichageDesErreurs {
+    margin-top: 15px;
+    text-align: center;
+    color: #ff4c4c;
+    font-weight: bold;
+}
+
+
+/* Responsive */
+
+@media screen and (max-width: 600px) {
+    .formulairePourBDProf {
+        padding: 15px;
+    }
+    .formulairePourBDProf select,
+    .formulairePourBDProf button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
