@@ -138,3 +138,205 @@ h1 {
         padding: 10px;
     }
 }
+
+
+/* Styles pour l'affichage en vrac */
+
+.resultats-vrac {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.carte-pokemon {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ligne-donnee {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.valeur {
+    color: #212529;
+}
+
+.aucun-resultat {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+
+/* Conserver les styles existants pour les erreurs */
+
+.messageErreur {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+
+/* --- Styles généraux (Fond, Texte) --- */
+
+body {
+    background-color: #121212;
+    /* Fond sombre */
+    color: #e0e0e0;
+    /* Texte clair */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+
+/* --- Titre de l'encyclopédie --- */
+
+.titre-encyclopedie {
+    font-size: 3em;
+    color: #ffcc00;
+    /* Jaune/Or pour le contraste */
+    border-bottom: 3px solid #cc0000;
+    /* Ligne rouge en dessous */
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+
+/* --- Barre de recherche (le bloc blanc dans l'image) --- */
+
+.boite-recherche {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    /* Limite la largeur comme dans l'image */
+    margin: 0 0 40px 0;
+}
+
+.boite-recherche h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.boite-recherche form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.boite-recherche select,
+.boite-recherche button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.boite-recherche button {
+    background-color: #3f51b5;
+    /* Bleu Pokémon */
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+.boite-recherche button:hover {
+    background-color: #303f9f;
+}
+
+
+/* --- Conteneur de cartes (Grille) --- */
+
+.tokenmen-card-container {
+    display: grid;
+    /* Crée une grille auto-ajustable de cartes */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    /* Espacement entre les cartes */
+    padding: 20px 0;
+}
+
+
+/* --- Style de la carte Pokémon individuelle --- */
+
+.carte-pokemon {
+    background-color: #2c2c2c;
+    /* Fond de carte sombre */
+    border: 1px solid #444;
+    border-radius: 10px;
+    overflow: hidden;
+    /* Important pour les images */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+
+/* --- Style spécifique pour l'image de la carte (non gérée par le JS actuel) --- */
+
+
+/* ATTENTION: Votre JS actuel ne génère pas d'images. */
+
+
+/* Si vous aviez des images, vous auriez besoin d'une balise <img> dans le HTML */
+
+.carte-pokemon img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Simulation de l'image de fond vert/clair */
+    background-color: #a3d9a3;
+    min-height: 120px;
+    object-fit: contain;
+}
+
+
+/* --- Style de l'en-tête de la carte (nom) --- */
+
+.carte-pokemon div:first-child {
+    background-color: #607d8b;
+    /* Couleur de la barre de titre */
+    color: white;
+    padding: 8px 0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+
+/* --- Lignes de données de la carte (ID, Type) --- */
+
+.ligne-donnee {
+    padding: 2px 10px;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.ligne-donnee .label {
+    font-weight: bold;
+    color: #ffcc00;
+    /* Couleur jaune/or pour les labels */
+}
+
+.ligne-donnee .valeur {
+    /* La valeur suit le label */
+    color: #ffffff;
+}

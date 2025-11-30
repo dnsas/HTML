@@ -12,31 +12,36 @@
 
 <body>
 
+    <h1>Encyclopédie Pokémon</h1>
 
-    <h1>Pokédex</h1>
     <nav>
-        <a href="/table.html"> TABLE</a>
+        <a href="/table.html"> TABLE (Ancienne vue)</a>
     </nav>
 
-    <!-- Formulaire pour la base de données Pokémon -->
     <form class="formulairePourBDProf">
+        <h2>Trouvez votre Pokémon !</h2>
         <label for="requete">Choisir une requête :</label>
         <select name="requete" id="requete">
+            
             <option value="SELECT * FROM pokemons;">Tous les Pokémon</option>
+            
             <option value="SELECT p.nom FROM pokemons p INNER JOIN est_type et ON p.id = et.pokemon_id GROUP BY p.id, p.nom HAVING COUNT(et.type_id) = 2;">Pokémon à double type</option>
-            <option value="SELECT nom, types.libelle FROM pokemons JOIN est_type ON est_type.pokemon_id = pokemons.id JOIN types ON est_type.type_id = types.id ">Pokémon et leur type (multi-table)</option>
+            
+            <option value="SELECT p.nom, t.libelle AS type_pokemon FROM pokemons p JOIN est_type et ON et.pokemon_id = p.id JOIN types t ON et.type_id = t.id;">Pokémon et leur type (multi-table)</option>
+            
             <option value="SELECT DISTINCT p.nom FROM pokemons p JOIN evolue_en ee ON p.id = ee.pokemon_base_id;">Pokémon évoluables</option>
+            
         </select>
         <button type="submit">Exécuter</button>
     </form>
 
-    <!-- Tableau de résultats -->
+    ---
+
     <div class="affichageBD">
-        <table></table>
     </div>
 
-    <!-- Zone pour les erreurs -->
     <div class="affichageDesErreurs"></div>
+
 </body>
 
 </html>
