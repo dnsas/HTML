@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pokédex</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/gestionFormulaire.js" defer></script>
+</head>
+
+<body>
+    <h1>TABLES</h1>
+
+    <!-- Formulaire pour la base de données Pokémon -->
+    <form class="formulairePourBDProf">
+        <label for="requete">Choisir une requête :</label>
+        <select name="requete" id="requete">
+            <option value="SELECT * FROM pokemons;">Tous les Pokémon</option>
+            <option value="SELECT * FROM types">TOus les TYPES</option>
+            <option value="SELECT * FROM est_type;">Tous est_types</option>
+            <option value="SELECT *FROM evolue_en ">Tous evolue</option>
+            <option value="SELECT *FROM attaques ">Tous ATTAQUES</option>
+            <option value="SELECT *FROM detient_pokemons ">Tous detient_pokemon</option>
+            <option value="SELECT *FROM dresseurs ">dresseurs</option>
+        </select>
+        <button type="submit">Exécuter</button>
+    </form>
+
+    <!-- Tableau de résultats -->
+    <div class="affichageBD">
+        <table></table>
+    </div>
+
+    <!-- Zone pour les erreurs -->
+    <div class="affichageDesErreurs"></div>
+</body>
+
+</html>
