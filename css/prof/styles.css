@@ -1,4 +1,4 @@
-/* Importation de la police Poppins */
+/* --- 1. Réinitialisation et Polices --- */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 * {
@@ -9,17 +9,15 @@
 }
 
 
-/* Body avec fond léger */
+/* --- 2. Body et Styles Généraux --- */
 
 body {
-    background-color: black;
-    background-size: cover;
+    background-color: #121212;
+    /* Fond sombre */
     padding: 20px;
     color: white;
+    font-family: 'Arial', sans-serif;
 }
-
-
-/* Titre principal */
 
 h1 {
     text-align: center;
@@ -30,13 +28,21 @@ h1 {
 }
 
 
-/* Formulaire */
+/* --- 3. Navigation et Formulaire (Style sombre/Glassmorphism) --- */
+
+nav a {
+    color: #00bcd4;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: 500;
+}
 
 .formulairePourBDProf {
     max-width: 500px;
     margin: 0 auto 30px auto;
     padding: 20px;
     background: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent */
     border-radius: 20px;
     backdrop-filter: blur(15px);
     display: flex;
@@ -44,16 +50,10 @@ h1 {
     gap: 15px;
 }
 
-
-/* Label */
-
 .formulairePourBDProf label {
     font-weight: 500;
-    margin-bottom: 5px;
+    color: white;
 }
-
-
-/* Select */
 
 .formulairePourBDProf select {
     padding: 12px 15px;
@@ -63,16 +63,7 @@ h1 {
     color: white;
     outline: none;
     font-size: 16px;
-    transition: border 0.3s ease, background-color 0.3s ease;
 }
-
-.formulairePourBDProf select:focus {
-    border-color: rgba(255, 255, 255, 0.7);
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-
-/* Bouton du formulaire */
 
 .formulairePourBDProf button {
     padding: 12px 15px;
@@ -92,242 +83,85 @@ h1 {
 }
 
 
-/* Tableau de résultats */
+/* --- 4. Conteneur de Cartes (Grille) --- */
 
-.affichageBD table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.affichageBD th,
-.affichageBD td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.affichageBD th {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-
-/* Zone des erreurs */
-
-.affichageDesErreurs {
-    margin-top: 15px;
-    text-align: center;
-    color: #ff4c4c;
-    font-weight: bold;
-}
-
-
-/* Responsive */
-
-@media screen and (max-width: 600px) {
-    .formulairePourBDProf {
-        padding: 15px;
-    }
-    .formulairePourBDProf select,
-    .formulairePourBDProf button {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-
-/* Styles pour l'affichage en vrac */
-
-.resultats-vrac {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.carte-pokemon {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.ligne-donnee {
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.label {
-    font-weight: bold;
-    color: #495057;
-}
-
-.valeur {
-    color: #212529;
-}
-
-.aucun-resultat {
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
-    padding: 20px;
-}
-
-
-/* Conserver les styles existants pour les erreurs */
-
-.messageErreur {
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-    padding: 10px;
-    margin: 10px 0;
-}
-
-
-/* --- Styles généraux (Fond, Texte) --- */
-
-body {
-    background-color: #121212;
-    /* Fond sombre */
-    color: #e0e0e0;
-    /* Texte clair */
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 20px;
-}
-
-
-/* --- Titre de l'encyclopédie --- */
-
-.titre-encyclopedie {
-    font-size: 3em;
-    color: #ffcc00;
-    /* Jaune/Or pour le contraste */
-    border-bottom: 3px solid #cc0000;
-    /* Ligne rouge en dessous */
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-
-/* --- Barre de recherche (le bloc blanc dans l'image) --- */
-
-.boite-recherche {
-    background-color: #ffffff;
-    color: #000000;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    /* Limite la largeur comme dans l'image */
-    margin: 0 0 40px 0;
-}
-
-.boite-recherche h3 {
-    margin-top: 0;
-    font-size: 1.2em;
-}
-
-.boite-recherche form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.boite-recherche select,
-.boite-recherche button {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.boite-recherche button {
-    background-color: #3f51b5;
-    /* Bleu Pokémon */
-    color: white;
-    cursor: pointer;
-    border: none;
-    font-weight: bold;
-}
-
-.boite-recherche button:hover {
-    background-color: #303f9f;
-}
-
-
-/* --- Conteneur de cartes (Grille) --- */
-
-.tokenmen-card-container {
-    display: grid;
-    /* Crée une grille auto-ajustable de cartes */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    /* Espacement entre les cartes */
+.affichageBD {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 20px 0;
 }
 
+.tokenmen-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
 
-/* --- Style de la carte Pokémon individuelle --- */
+
+/* --- 5. Style de la Carte Pokémon (SOMBRE) --- */
 
 .carte-pokemon {
     background-color: #2c2c2c;
     /* Fond de carte sombre */
-    border: 1px solid #444;
+    border: 3px solid #607d8b;
+    /* Bordure gris-bleu */
     border-radius: 10px;
     overflow: hidden;
-    /* Important pour les images */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    text-align: center;
-    padding-bottom: 10px;
+    text-align: left;
+    color: #e0e0e0;
 }
 
 
-/* --- Style spécifique pour l'image de la carte (non gérée par le JS actuel) --- */
+/* Zone pour l'image et le fond coloré (généré par .image-simulee) */
 
-
-/* ATTENTION: Votre JS actuel ne génère pas d'images. */
-
-
-/* Si vous aviez des images, vous auriez besoin d'une balise <img> dans le HTML */
-
-.carte-pokemon img {
-    width: 100%;
-    height: auto;
-    display: block;
-    /* Simulation de l'image de fond vert/clair */
-    background-color: #a3d9a3;
+.image-simulee {
     min-height: 120px;
+    background: linear-gradient(135deg, #a3d9a3, #cceeff);
+    /* Fond coloré */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #607d8b;
+}
+
+.image-simulee img {
+    /* Image du Pokémon */
+    max-width: 90%;
+    max-height: 120px;
     object-fit: contain;
 }
 
 
-/* --- Style de l'en-tête de la carte (nom) --- */
+/* En-tête de la carte (Nom du Pokémon/ID) */
 
-.carte-pokemon div:first-child {
+
+/* Cible le div qui suit l'image (le titre) */
+
+.carte-pokemon div:nth-child(2) {
     background-color: #607d8b;
     /* Couleur de la barre de titre */
     color: white;
-    padding: 8px 0;
+    padding: 8px 10px;
     font-weight: bold;
     font-size: 1.1em;
+    text-align: center;
 }
 
 
-/* --- Lignes de données de la carte (ID, Type) --- */
+/* Lignes de données de la carte (ID, Type) */
 
 .ligne-donnee {
-    padding: 2px 10px;
-    text-align: left;
+    padding: 4px 10px;
     font-size: 0.9em;
+    text-align: left;
+    border-bottom: 1px dotted #444;
+    /* Ligne pointillée sombre */
+}
+
+.ligne-donnee:last-of-type {
+    border-bottom: none;
 }
 
 .ligne-donnee .label {
@@ -337,6 +171,23 @@ body {
 }
 
 .ligne-donnee .valeur {
-    /* La valeur suit le label */
     color: #ffffff;
+}
+
+
+/* --- 6. Styles des Erreurs et Messages --- */
+
+.affichageDesErreurs {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.messageErreur {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 600px;
 }
