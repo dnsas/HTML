@@ -1,3 +1,132 @@
+/* --- Styles globaux --- */
+
+body {
+    background-color: #eff3ff;
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* Conteneur principal pour les résultats (Grille) */
+
+.affichageBD {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px;
+}
+
+
+/* --- Style de la Carte Pokemon --- */
+
+.card {
+    position: relative;
+    width: 300px;
+    /* Légèrement réduit pour en afficher plusieurs */
+    padding: 30px 20px;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    background-color: white;
+    /* Couleur par défaut si pas de type */
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    display: block;
+    width: 150px;
+    max-height: 180px;
+    position: relative;
+    margin: 20px auto;
+}
+
+
+/* Points de vie (HP) */
+
+.hp {
+    width: 80px;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 30px;
+    margin-left: auto;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.hp span {
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+}
+
+
+/* Nom du Pokemon */
+
+.poke-name {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+
+/* Types */
+
+.types {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0 20px 0;
+}
+
+.types span {
+    padding: 5px 20px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+    text-transform: capitalize;
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Fallback si couleur type échoue */
+}
+
+
+/* Statistiques (Attaque, Défense, Vitesse) */
+
+.stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.stats p {
+    color: #404060;
+    font-size: 12px;
+}
+
+.stats h3 {
+    font-size: 18px;
+}
+
+
+/* Message d'erreur ou vide */
+
+.aucun-resultat {
+    width: 100%;
+    text-align: center;
+    font-size: 1.2em;
+    color: #555;
+}
+
+
 /* --- 1. Réinitialisation et Polices --- */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
