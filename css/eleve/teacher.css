@@ -1,0 +1,605 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: url("image.jpg");
+}
+
+section.content {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1,
+h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.form {
+    margin-bottom: 30px;
+}
+
+.input-box {
+    width: 100%;
+}
+
+#classeSelect {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+#classeSelect:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: black;
+}
+
+#eleves-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.eleve-card {
+    perspective: 1000px;
+    width: 300px;
+    height: 400px;
+}
+
+.eleve-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.eleve-card.flipped .eleve-card-inner {
+    transform: rotateY(180deg);
+}
+
+.eleve-card-front,
+.eleve-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.eleve-card-front {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.eleve-card-back {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transform: rotateY(180deg);
+}
+
+.eleve-card h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.eleve-info p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-btn,
+.view-qr-btn,
+.return-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+    background-color: #ff4757;
+}
+
+.delete-btn:hover {
+    background-color: #ff6b81;
+}
+
+.view-qr-btn,
+.return-btn {
+    background-color: #2ea0d5;
+}
+
+.view-qr-btn:hover,
+.return-btn:hover {
+    background-color: #7bbaed;
+}
+
+#qrcode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+
+[id^="qrcode-"] {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+}
+
+div.retour {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+}
+
+div.retour button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+div.retour img {
+    width: 2.5rem;
+    height: 2.5rem;
+    filter: grayscale(100%);
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+div.retour img:hover {
+    filter: drop-shadow(0 0 3px red) contrast(0.8);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.container {
+    padding-top: 4rem;
+}
+
+.nombre-eleves {
+    position: absolute;
+    right: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.prof-image {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 25vw;
+    /* Utilisation de l'unité 'vw' pour être responsive */
+    height: auto;
+    z-index: 1001;
+}
+
+.teacher-background {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 25vw;
+    height: auto;
+    z-index: 1001;
+}
+
+.login-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    width: 500px;
+    max-width: 90%;
+    height: auto;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    /* Ajout d'une ombre */
+    margin: auto;
+}
+
+.login-container h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.login-container input:focus {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    /* Plus visible */
+}
+
+.login-container input,
+.login-container button {
+    display: block;
+    width: 60%;
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 25px;
+    outline: none;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-container input {
+    font-size: 16px;
+}
+
+.login-container button {
+    margin-top: 20px;
+    background-color: #B10C1C;
+    padding: 15px;
+    border-radius: 25px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    transform: scale(1.05);
+    background-color: #D11E2C;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    width: 80%;
+    padding-right: 8vw;
+    padding-top: 12px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: white;
+    outline: none;
+}
+
+.password-container i {
+    position: absolute;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.2rem;
+    transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.password-container i:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+@media screen and (max-width: 900px) {
+    .password-container input {
+        padding-right: 11vw;
+    }
+    .password-container i {
+        right: 9.5vw;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .password-container input {
+        padding-right: 11vw;
+    }
+    .password-container i {
+        right: 11vw;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+    }
+    .login-container h2 {
+        font-size: 24px;
+    }
+    .login-container input,
+    .login-container button {
+        width: 80%;
+        font-size: 14px;
+    }
+}
+
+.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.alert-success {
+    background-color: rgba(76, 175, 80, 0.9);
+}
+
+.alert-danger {
+    background-color: rgba(244, 67, 54, 0.9);
+}
+
+.alert.show {
+    opacity: 1;
+}
+
+.confirmation-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.dialog-content {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: x-large;
+}
+
+.confirm-btn,
+.cancel-btn {
+    transition: 0.5s;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: #f44336;
+    /* Vert */
+    color: white;
+}
+
+.confirm-btn:hover {
+    transform: scale(1.2);
+}
+
+.cancel-btn {
+    background-color: #2ea0d5;
+    /* Rouge */
+    color: white;
+}
+
+.cancel-btn:hover {
+    transform: scale(1.2);
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 20px;
+    }
+    div.retour {
+        top: 0.5rem;
+        left: 0.5rem;
+    }
+    div.retour img {
+        width: 2rem;
+        height: 2rem;
+    }
+    .container {
+        padding-top: 3rem;
+    }
+    .eleve-card-front,
+    .eleve-card-back {
+        padding: 15px;
+    }
+    #eleves-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .eleve-card h3 {
+        font-size: 20px;
+    }
+    .eleve-info p {
+        font-size: 14px;
+    }
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .delete-btn,
+    .view-qr-btn,
+    .return-btn {
+        width: 100%;
+    }
+    .nombre-eleves {
+        position: static;
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .dialog-content {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    .container {
+        padding: 15px;
+    }
+    h1,
+    h2 {
+        font-size: 24px;
+    }
+    #classeSelect {
+        font-size: 14px;
+    }
+    .eleve-card h3 {
+        font-size: 18px;
+    }
+    .eleve-info p {
+        font-size: 12px;
+    }
+    .dialog-content {
+        width: 70%;
+    }
+}
+
+div.retour {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+}
+
+div.retour button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+div.retour img {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+div.retour img:hover {
+    filter: drop-shadow(0 0 3px red) contrast(0.8);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}

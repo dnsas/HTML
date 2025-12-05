@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link rel="icon" href="/css/eleve/images/scans_ico.png" sizes="51x51" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="permissions-policy" content="camera=(self)">
+    <title>Scanner QR Code</title>
+    <script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://kit.fontawesome.com/f79850fb33.js" crossorigin="anonymous"></script>
+    <script src="/js/eleve/scan.js" defer></script>
+    <link rel="stylesheet" href="/css/eleve/scan.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="alert-container" class="alert-container"></div>
+        <section class="form">
+            <div class="retour">
+                <button onclick="retourAccueil()">
+                    <img src="/css/eleve/images/retour.png" alt="Scanner QR Code">
+                </button>
+            </div>
+            <h1>Scanner QR Code</h1>
+            <div class="input-box">
+                <select id="cameraSelector"></select>
+            </div>
+            <div class="video-container">
+                <video id="preview" autoplay></video>
+            </div>
+            <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+        </section>
+
+        <section class="result-data" id="result" style="display: none;">
+            <h2>Résultat du Scan</h2>
+            <div id="qrDataList"></div>
+            <button class="send-btn" id="rescanButton">Rescanner</button>
+        </section>
+    </div>
+</body>
+
+</html>

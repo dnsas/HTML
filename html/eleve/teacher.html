@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link rel="icon" href="/css/eleve/images/prof_ico.png" sizes="51x51" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page du Professeur </title>
+    <link rel="stylesheet" href="/css/eleve/teacher.css">
+
+    <script src="https://kit.fontawesome.com/f79850fb33.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+</head>
+
+<body>
+    <div id="alert-container" class="alert-container"></div>
+    <div id="confirmation-dialog" class="confirmation-dialog" style="display: none;">
+        <div class="dialog-content">
+            <p id="confirmation-message">Êtes-vous sûr de vouloir supprimer cet élève ?</p>
+            <button id="confirm-yes" class="confirm-btn">Supprimer</button>
+            <button id="confirm-no" class="cancel-btn">Annuler</button>
+        </div>
+    </div>
+
+    <div id="loginOverlay" class="login-overlay">
+
+        <img src="/css/eleve/images/prof.png" alt="Prof Image" class="prof-image">
+        <img src="/css/eleve/images/teacherfond.png" alt="Teacher Background" class="teacher-background">
+        <div id="loginOverlay" class="login-overlay">
+            <img src="/css/eleve/images/prof.png" alt="Prof Image" class="prof-image">
+            <img src="/css/eleve/images/teacherfond.png" alt="Teacher Background" class="teacher-background">
+            <div class="login-container">
+                <h2>Authentification</h2>
+                <div class="password-container">
+                    <i class="fa-solid fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                    <input type="password" id="passwordInput" placeholder="Entrez le mot de passe" onkeydown="checkEnter(event)">
+                </div>
+                <button onclick="checkPassword()">Se connecter</button>
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container" id="container" style="display: none;">
+            <div class="retour">
+                <button onclick="retourAccueil()">
+                    <img src="/css/eleve/images/retour.png" alt="Scanner QR Code">
+                </button>
+            </div>
+            <header>
+                <h1>Gestion des Élèves</h1>
+            </header>
+            <section class="form">
+                <h2>Filtrer par Classe</h2>
+                <div class="input-box">
+                    <select id="classeSelect" onchange="afficherDonnees()">
+                        <option value="">Toutes les classes</option>
+                    </select>
+                </div>
+            </section>
+            <div id="nombre-eleves" class="nombre-eleves">Nombre d'élèves : 0</div>
+            <section class="eleves-data">
+                <h2>Liste des Élèves</h2>
+                <div id="eleves-list"></div>
+            </section>
+        </div>
+
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+
+        <script src="/js/eleve/teacher.js"></script>
+    </section>
+</body>
+
+</html>

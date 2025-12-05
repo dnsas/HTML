@@ -1,7 +1,7 @@
 /** Comportements.js ******/
 // Programme principal
+
 console.log("Exécution du programme javascript ");
-// Mise en place d'un écouteur d'événement
 const formulaires = document.querySelectorAll('form');
 formulaires.forEach(unFormulaire => unFormulaire.addEventListener("submit", executerRequete));
 
@@ -72,6 +72,8 @@ function executerRequete(evt) {
             "method": "POST",
             "body": donneesDuFormulaire
         }
+
+        // envoie de la requête vers BDD
         fetch(adresseDesDonnees, optionsAjax)
             .then(response => response.json())
             .then(resultats => afficherResultatsRequete(resultats))
@@ -105,13 +107,15 @@ function afficherResultatsRequete(enregistrements) {
     // ** Changement pour utiliser la classe de grille CSS **
     conteneurResultats.className = 'tokenmen-card-container';
 
+
+
     // Pour chaque enregistrement, créer une carte
     enregistrements.forEach(function(unEnregistrement) {
         const carte = document.createElement('div');
         carte.className = 'carte-pokemon';
 
         // Tenter de trouver l'ID et le Nom
-        const pokemonId = unEnregistrement['id'] || unEnregistrement['ID'] || unEnregistrement['pokemon_id'];
+        const pokemonId = unEnregistrement['id']
         const pokemonNom = unEnregistrement['nom'] || 'Pokémon Inconnu';
 
         // --- INJECTION DE L'IMAGE ET DU TITRE ---
