@@ -30,7 +30,7 @@
             <option value="SELECT id,nom,types.libelle FROM pokemons JOIN est_type ON pokemons.id = est_type.pokemon_id JOIN types ON est_type.type_id = types.id;">Pokémon et leur type (multi-table)</option>
             
             <option value="SELECT p_base.nom AS base_nom,     p_evo.nom AS evol_nom FROM evolue_en JOIN pokemons p_base ON p_base.id = evolue_en.pokemon_base_id JOIN pokemons p_evo ON p_evo.id = evolue_en.pokemon_evol_id; ">Pokémon évoluables</option>
-            <option value="SELECT *FROM detient_pokemons ">Tous detient_pokemon</option>
+            <option value="SELECT * FROM detient_pokemons ">Tous detient_pokemon</option>
         </select>
 
         <div id="zonePerso" style="display:none; margin-top:10px;">

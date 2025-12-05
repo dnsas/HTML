@@ -1,2 +1,3 @@
 naananfdg
 ddffd
+adapte les deux fichiers pour avoir la photo du dresseur en photo de profil acompagne de l'image du pokemon
