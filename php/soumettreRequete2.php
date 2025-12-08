@@ -1,49 +1,102 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header('Content-type: application/json; charset=UTF-8');
+// /var/www/html/php/soumettreRequete2.php
+// Version qui autorise les INSERT, UPDATE, DELETE
 
-// Récupérer la requête SQL
-$texteRequete = $_POST['texteRequete'] ?? '';
+// Configuration des erreurs
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Vérifier si c'est une requête POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Cette API n\'accepte que les requêtes POST'
+    ]);
+    exit;
+}
+
+// Définir l'en-tête JSON
+header('Content-Type: application/json; charset=utf-8');
+
+// Paramètres de connexion
+$host = 'localhost';
+$dbname = 'BaseEtu';
+$username = 'root';
+$password = 'simpsons';
 
 try {
     // Connexion à la base de données
-    $db = new PDO("mysql:dbname=formulairePourBDEtudiant;host=localhost", "root", "simpsons");
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->query("SET NAMES utf8");
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Exécuter la requête
-    $requete = $db->prepare($texteRequete);
-    $requete->execute();
-    
-    // Si c'est une requête INSERT, UPDATE ou DELETE
-    if (stripos($texteRequete, 'INSERT') === 0 || 
-        stripos($texteRequete, 'UPDATE') === 0 || 
-        stripos($texteRequete, 'DELETE') === 0) {
-        
-        // Pour INSERT, récupérer le dernier ID inséré
-        if (stripos($texteRequete, 'INSERT') === 0) {
-            $lastId = $db->lastInsertId();
-            // Récupérer l'enregistrement inséré
-            $requeteSelect = $db->prepare("SELECT * FROM eleves WHERE id = ?");
-            $requeteSelect->execute([$lastId]);
-            $resultats = $requeteSelect->fetchAll(PDO::FETCH_OBJ);
-        } else {
-            // Pour UPDATE/DELETE, retourner le nombre de lignes affectées
-            $resultats = [['rows_affected' => $requete->rowCount()]];
-        }
-    } else {
-        // Pour SELECT, récupérer les résultats
-        $resultats = $requete->fetchAll(PDO::FETCH_OBJ);
+    // Vérifier si la requête est présente
+    if (!isset($_POST['texteRequete']) || empty(trim($_POST['texteRequete']))) {
+        throw new Exception("Aucune requête SQL reçue");
     }
     
-    echo json_encode($resultats);
+    $requete = trim($_POST['texteRequete']);
+    $requeteUpper = strtoupper($requete);
     
-} catch(PDOException $e) {
-    // En cas d'erreur
-    http_response_code(500);
-    echo json_encode([
-        'error' => true,
-        'message' => 'Erreur de base de données : ' . $e->getMessage()
-    ]);
+    // Sécurité : Vérifier le type de requête
+    // Autoriser SELECT, INSERT, UPDATE, DELETE mais avec des validations
+    $premierMot = strtok($requeteUpper, " ");
+    
+    $requetesAutorisees = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'SHOW', 'DESCRIBE'];
+    
+    if (!in_array($premierMot, $requetesAutorisees)) {
+        throw new Exception("Type de requête non autorisé. Seules les requêtes SELECT, INSERT, UPDATE, DELETE sont autorisées.");
+    }
+    
+    // Exécuter la requête
+    $stmt = $pdo->query($requete);
+    
+    // Préparer la réponse selon le type de requête
+    $response = ['success' => true];
+    
+    if ($premierMot === 'SELECT' || $premierMot === 'SHOW' || $premierMot === 'DESCRIBE') {
+        // Pour les requêtes de sélection
+        $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response['type'] = 'select';
+        $response['count'] = count($resultats);
+        $response['data'] = $resultats;
+        
+        if (count($resultats) === 0) {
+            $response['message'] = 'Aucun résultat trouvé';
+        }
+    } else {
+        // Pour les requêtes de modification (INSERT, UPDATE, DELETE)
+        $rowCount = $stmt->rowCount();
+        $response['type'] = strtolower($premierMot);
+        $response['affected_rows'] = $rowCount;
+        $response['message'] = "Opération réussie. $rowCount ligne(s) affectée(s).";
+        
+        // Pour les INSERT, récupérer le dernier ID
+        if ($premierMot === 'INSERT') {
+            $response['last_insert_id'] = $pdo->lastInsertId();
+        }
+    }
+    
+    echo json_encode($response, JSON_PRETTY_PRINT);
+    
+} catch (PDOException $e) {
+    // Erreur de base de données
+    $response = [
+        'success' => false,
+        'error' => 'Erreur de base de données',
+        'message' => $e->getMessage(),
+        'code' => $e->getCode()
+    ];
+    echo json_encode($response);
+    
+} catch (Exception $e) {
+    // Autre erreur
+    $response = [
+        'success' => false,
+        'error' => 'Erreur de requête',
+        'message' => $e->getMessage()
+    ];
+    echo json_encode($response);
 }
 ?>

@@ -16,6 +16,7 @@
     <!-- Inclure GestionFormulaire.js -->
     <script src="/js/eleve/gestionFormulaire.js" defer></script>
     <script src="/js/eleve/home.monqr.js" defer></script>
+    <script src="/js/eleve/FormulairePost.js" defer></script>
 </head>
 
 <body>
@@ -51,60 +52,59 @@
         </nav>
     </section>
     <section class="content">
-        <div id="alert-container" class="alert-container"></div>
+        <div id="alert-container" class=" affichageDesErreurs alert-container"></div>
+        <section class="form">
 
-        <!-- Modifiez la ligne du formulaire dans home.html -->
-        <form class="formulairePourBDEtudiant no-gestion-formulaire">
-            <h1>Générer mon QRCode</h1>
-            <div class="input-box">
-                <input type="text" placeholder="Nom" name="nom" class="nom" required>
-                <i class="fa-solid fa-arrow-down-z-a"></i>
-            </div>
-            <div class="input-box">
-                <input type="text" placeholder="Prenom" name="prenom" class="prenom" required>
-                <i class="fa-solid fa-signature"></i>
-            </div>
-            <div class="input-box">
-                <input type="text" placeholder="Ma Classe" name="classe" class="classe" required>
-                <i class="fa-solid fa-users"></i>
-            </div>
+            <!-- Modifier la section form pour correspondre à la structure attendue -->
+            <!-- Modifiez la ligne du formulaire dans home.html -->
+            <form class="formulairePourBDEtudiant no-gestion-formulaire">
+                <h1>Générer mon QRCode</h1>
+                <div class="input-box">
+                    <input type="text" placeholder="Nom" name="nom" class="nom" required>
+                    <i class="fa-solid fa-arrow-down-z-a"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Prenom" name="prenom" class="prenom" required>
+                    <i class="fa-solid fa-signature"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Ma Classe" name="classe" class="classe" required>
+                    <i class="fa-solid fa-users"></i>
+                </div>
 
-            <!-- Champ caché pour la requête SQL qui sera rempli dynamiquement -->
-            <input type="hidden" name="requete" id="sqlRequete">
+                <!-- Champ caché pour la requête SQL qui sera rempli dynamiquement -->
+                <input type="hidden" name="requete" id="sqlRequete">
 
-            <button type="submit" class="send-btn">Envoyer</button>
-        </form>
+                <button type="submit" class="send-btn">Envoyer</button>
+            </form>
 
-        <div id="qrCanvasContainer"></div>
-        <div id="current_date"></div>
+            <div id="qrCanvasContainer"></div>
+            <div id="current_date"></div>
 
-        <!-- Section QR Code -->
-        <div class="qr_code" style="display:none;">
-            <canvas id="qrCanvas"></canvas>
-            <div class="button-container">
-                <button id="downloadBtn" style="display:none;">
+            <!-- Section QR Code -->
+            <div class="qr_code" style="display:none;">
+                <canvas id="qrCanvas"></canvas>
+                <div class="button-container">
+                    <button id="downloadBtn" style="display:none;">
                     <i class="fa-solid fa-download"></i> Télécharger
                 </button>
-                <button id="shareBtn" style="display:none;">
+                    <button id="shareBtn" style="display:none;">
                     <i class="fa-solid fa-share-nodes"></i> Partager
                 </button>
+                </div>
             </div>
-        </div>
 
-        <!-- Table pour afficher les résultats -->
-        <div class="affichageBD" style="display:none;">
-            <table>
-                <!-- Les résultats de la requête seront insérés ici -->
-            </table>
-        </div>
 
-        <!-- Zone pour les messages d'erreur -->
-        <div class="affichageDesErreurs"></div>
 
-        <div id="loading-spinner" style="display: none;">
-            <div class="spinner"></div>
-        </div>
+
+            <div id="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+        </section>
     </section>
+
 </body>
+
+
 
 </html>
