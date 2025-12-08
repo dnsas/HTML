@@ -156,6 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const messageDiv = document.createElement('div');
         messageDiv.textContent = message;
+        messageDiv.style.cssText = `
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: ${type === 'success' ? '#d4edda' : '#d1ecf1'};
+            color: ${type === 'success' ? '#155724' : '#0c5460'};
+            border: 1px solid ${type === 'success' ? '#c3e6cb' : '#bee5eb'};
+        `;
 
         container.appendChild(messageDiv);
 
@@ -164,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (messageDiv.parentNode) {
                 messageDiv.parentNode.removeChild(messageDiv);
             }
-        }, 55000);
+        }, 5000);
     }
 
     function afficherErreurQR(message) {
