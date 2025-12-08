@@ -15,7 +15,7 @@
     <h1>Encyclopédie Pokémon</h1>
 
     <nav>
-        <a href="prof/table.html"> TABLE (Ancienne vue)</a>
+        <a href="table.html"> TABLE (Ancienne vue)</a>
         <a href="marequete.html"> Taper ma propre Requête</a>
     </nav>
 
@@ -24,7 +24,19 @@
         <label for="requete">Choisir une requête :</label>
         <select name="requete" id="requete">
             
-            <option value="SELECT * FROM pokemons;">Tous les Pokémon (Simple)</option>
+            <option value="SELECT *,
+    pokemons.id,
+    pokemons.nom,
+    types.libelle,
+    attaques.libelle
+FROM pokemons
+JOIN est_type 
+    ON pokemons.id = est_type.pokemon_id
+JOIN types 
+    ON est_type.type_id = types.id
+JOIN attaques 
+    ON types.id = attaques.type_id
+">Tous les Pokémon (Simple)</option>
             
             <option value="SELECT pokemons.id, pokemons.nom, types.libelle FROM pokemons JOIN est_type ON pokemons.id = est_type.pokemon_id JOIN types ON est_type.type_id = types.id;">Pokémon avec Types (Couleurs)</option>
             

@@ -27,8 +27,7 @@ function mapTypeToColorKey(frenchType) {
     const map = {
         "Insecte": "bug",
         "Dragon": "dragon",
-        "Electrik": "electric",
-        "Électrik": "electric",
+        "Electrique": "electric",
         "Fee": "fairy",
         "Fée": "fairy",
         "Combat": "fighting",

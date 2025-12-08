@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page d'accueil</title>
     <link rel="stylesheet" href="/css/eleve/home.css">
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://kit.fontawesome.com/f79850fb33.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.1/qrious.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/index.min.js"></script>
-    <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.1/qrious.min.js"></script>
+
+    <!-- Inclure GestionFormulaire.js -->
+    <script src="/js/eleve/gestionFormulaire.js" defer></script>
     <script src="/js/eleve/home.monqr.js" defer></script>
 </head>
 
@@ -52,37 +52,55 @@
     </section>
     <section class="content">
         <div id="alert-container" class="alert-container"></div>
-        <section class="form">
+
+        <!-- Modifiez la ligne du formulaire dans home.html -->
+        <form class="formulairePourBDEtudiant no-gestion-formulaire">
             <h1>Générer mon QRCode</h1>
             <div class="input-box">
-                <input type="text" placeholder="Nom" class="nom">
+                <input type="text" placeholder="Nom" name="nom" class="nom" required>
                 <i class="fa-solid fa-arrow-down-z-a"></i>
             </div>
             <div class="input-box">
-                <input type="text" placeholder="Prenom" class="prenom">
+                <input type="text" placeholder="Prenom" name="prenom" class="prenom" required>
                 <i class="fa-solid fa-signature"></i>
             </div>
             <div class="input-box">
-                <input type="text" placeholder="Ma Classe" class="classe">
+                <input type="text" placeholder="Ma Classe" name="classe" class="classe" required>
                 <i class="fa-solid fa-users"></i>
             </div>
 
-            <button class="send-btn" onclick="generateQRCode()">Envoyer</button>
-            <div id="qrCanvasContainer"></div>
+            <!-- Champ caché pour la requête SQL qui sera rempli dynamiquement -->
+            <input type="hidden" name="requete" id="sqlRequete">
 
-            <div id="current_date"></div>
-            <div class="qr_code" style="display:none;">
-                <canvas id="qrCanvas"></canvas>
-                <div class="button-container">
-                    <button id="downloadBtn" style="display:none;" onclick="downloadQRCode()">
-                        <i class="fa-solid fa-download"></i>
-                    </button>
-                    <button id="shareBtn" style="display:none;" onclick="shareQRCode()">
-                        <i class="fa-solid fa-share-nodes"></i>
-                    </button>
-                </div>
+            <button type="submit" class="send-btn">Envoyer</button>
+        </form>
+
+        <div id="qrCanvasContainer"></div>
+        <div id="current_date"></div>
+
+        <!-- Section QR Code -->
+        <div class="qr_code" style="display:none;">
+            <canvas id="qrCanvas"></canvas>
+            <div class="button-container">
+                <button id="downloadBtn" style="display:none;">
+                    <i class="fa-solid fa-download"></i> Télécharger
+                </button>
+                <button id="shareBtn" style="display:none;">
+                    <i class="fa-solid fa-share-nodes"></i> Partager
+                </button>
             </div>
-        </section>
+        </div>
+
+        <!-- Table pour afficher les résultats -->
+        <div class="affichageBD" style="display:none;">
+            <table>
+                <!-- Les résultats de la requête seront insérés ici -->
+            </table>
+        </div>
+
+        <!-- Zone pour les messages d'erreur -->
+        <div class="affichageDesErreurs"></div>
+
         <div id="loading-spinner" style="display: none;">
             <div class="spinner"></div>
         </div>
