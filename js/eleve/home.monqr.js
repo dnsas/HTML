@@ -1,40 +1,7 @@
 // home.monqr.js
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Initialiser Firebase si nécessaire
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
 
-    // Fonctions d'alerte
-    function showAlert(message, type) {
-        const alertContainer = document.getElementById('alert-container');
-        const alert = document.createElement('div');
-        alert.className = `alert alert-${type}`;
-        alert.textContent = message;
-        alertContainer.appendChild(alert);
-
-        setTimeout(() => {
-            alert.classList.add('show');
-        }, 100);
-
-        setTimeout(() => {
-            alert.classList.remove('show');
-            setTimeout(() => {
-                if (alertContainer.contains(alert)) {
-                    alertContainer.removeChild(alert);
-                }
-            }, 300);
-        }, 3000);
-    }
-
-    function showSuccessAlert(message) {
-        showAlert(message, 'success');
-    }
-
-    function showErrorAlert(message) {
-        showAlert(message, 'danger');
-    }
 
     // Récupérer le formulaire
     const formulaireEleve = document.querySelector('.formulairePourBDEtudiant');
@@ -51,10 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const prenom = this.querySelector('[name="prenom"]').value.trim();
             const classe = this.querySelector('[name="classe"]').value.trim();
 
-            if (!nom || !prenom || !classe) {
-                showErrorAlert("Veuillez remplir tous les champs !");
-                return;
-            }
 
             document.getElementById('loading-spinner').style.display = 'flex';
 

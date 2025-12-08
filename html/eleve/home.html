@@ -60,22 +60,22 @@
             <form class="formulairePourBDEtudiant no-gestion-formulaire">
                 <h1>Générer mon QRCode</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Nom" name="nom" class="nom" required>
+                    <input type="text" placeholder="Nom" name="nom" class="nom">
                     <i class="fa-solid fa-arrow-down-z-a"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Prenom" name="prenom" class="prenom" required>
+                    <input type="text" placeholder="Prenom" name="prenom" class="prenom">
                     <i class="fa-solid fa-signature"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Ma Classe" name="classe" class="classe" required>
+                    <input type="text" placeholder="Ma Classe" name="classe" class="classe">
                     <i class="fa-solid fa-users"></i>
                 </div>
 
                 <!-- Champ caché pour la requête SQL qui sera rempli dynamiquement -->
                 <input type="hidden" name="requete" id="sqlRequete">
 
-                <button type="submit" class="send-btn">Envoyer</button>
+                <button type="submit" class="send-btn"> <i class="fa-solid fa-user-plus"> Envoyer </i></button>
             </form>
 
             <div id="qrCanvasContainer"></div>
