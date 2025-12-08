@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Exécuter une requête SELECT pour afficher les données mises à jour
                         executerSelectApresInsert();
                     } else {
-                        afficherErreurQR("❌ Erreur: " + (resultats.message || resultats.error));
+                        afficherErreurQR("❌ Erreur: " + (resultats.message || resultats.error), "danger");
                     }
                 })
                 .catch(erreur => {
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonctions d'affichage de messages
     function afficherMessageQR(message, type) {
-        const container = document.querySelector('.affichageDesErreurs');
+        const container = document.querySelector('.alert-container');
         if (!container) return;
 
         // Supprimer les anciens messages
@@ -155,15 +155,8 @@ document.addEventListener('DOMContentLoaded', function() {
         anciensMessages.forEach(msg => msg.remove());
 
         const messageDiv = document.createElement('div');
+        messageDiv.className = ` alert alert-${type} show`;
         messageDiv.textContent = message;
-        messageDiv.style.cssText = `
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            background-color: ${type === 'success' ? '#d4edda' : '#d1ecf1'};
-            color: ${type === 'success' ? '#155724' : '#0c5460'};
-            border: 1px solid ${type === 'success' ? '#c3e6cb' : '#bee5eb'};
-        `;
 
         container.appendChild(messageDiv);
 
@@ -172,10 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (messageDiv.parentNode) {
                 messageDiv.parentNode.removeChild(messageDiv);
             }
-        }, 5000);
+        }, 45000);
     }
 
     function afficherErreurQR(message) {
-        afficherMessageQR(message, 'error');
+        afficherMessageQR(message, 'danger');
     }
 });
