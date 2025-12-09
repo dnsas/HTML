@@ -11,11 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
         formulaireQR.addEventListener('submit', function(evt) {
             console.log("Formulaire QR soumis (géré par FormulairePost.js)");
             evt.preventDefault();
+            evt.stopImmediatePropagation(); // Empêche home.monqr.js de s'exécuter
 
             // Récupérer les valeurs du formulaire
-            const nom = this.querySelector('.nom').value;
-            const prenom = this.querySelector('.prenom').value;
-            const classe = this.querySelector('.classe').value;
+            const nom = this.querySelector('.nom').value.trim();
+            const prenom = this.querySelector('.prenom').value.trim();
+            const classe = this.querySelector('.classe').value.trim();
 
             console.log(`Données récupérées: ${nom}, ${prenom}, ${classe}`);
 
@@ -31,8 +32,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 spinner.style.display = 'block';
             }
 
+
+            // Créer la date pour MySQL (format YYYY-MM-DD HH:MM:SS)
+            const maintenant = new Date();
+            const dateMySQL = maintenant.toISOString().slice(0, 19).replace('T', ' ');
+
+            // Date formatée pour le QR Code
+            const dateQR = maintenant.toLocaleString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+
+
             // Construire la requête SQL INSERT
-            const requeteSQL = `INSERT INTO eleves (nom, prenom, classe, dateCreation) VALUES ('${nom}', '${prenom}', '${classe}', CURDATE())`;
+            const requeteSQL = `INSERT INTO eleves (nom, prenom, classe, dateCreation) VALUES ('${nom}', '${prenom}', '${classe}', '${dateMySQL}')`;
             console.log("Requête SQL générée:", requeteSQL);
 
 
@@ -58,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (resultats.success) {
                         // Afficher un message de succès
                         afficherMessageQR(`✅ Élève ajouté avec succès! `, 'success');
-
+                        genererQRCodeApresInsertion(nom, prenom, classe, dateQR, resultats);
                         // Générer le QR code (si votre code home.monqr.js le fait)
                         // Vous pourriez appeler une fonction de home.monqr.js ici
 
@@ -85,6 +102,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    // Fonction pour générer le QR Code après insertion
+    function genererQRCodeApresInsertion(nom, prenom, classe, dateQR, resultatsInsertion) {
+        console.log("Déclenchement de la génération du QR Code...");
+
+        // Créer un événement personnalisé avec les données
+        const qrEvent = new CustomEvent('genererQRCode', {
+            detail: {
+                nom: nom,
+                prenom: prenom,
+                classe: classe,
+                date: dateQR,
+                insertionReussie: resultatsInsertion.success || false
+            }
+        });
+
+        // Déclencher l'événement sur le document
+        document.dispatchEvent(qrEvent);
+    }
 
 
     // Fonctions d'affichage de messages
@@ -110,7 +145,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 45000);
     }
 
-    function afficherErreurQR(message) {
-        afficherMessageQR(message, 'danger');
-    }
 });
