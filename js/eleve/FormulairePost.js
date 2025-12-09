@@ -145,4 +145,54 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 45000);
     }
 
+
+
+    window.downloadQRCode = function() {
+        const canvas = document.getElementById('qrCanvas');
+        if (!canvas) {
+            showErrorAlert('Erreur : Canvas non trouvé !');
+            return;
+        }
+
+        try {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'qrcode.png';
+            link.click();
+            showSuccessAlert('QR Code téléchargé avec succès !');
+        } catch (error) {
+            console.error('Error creating download link:', error);
+            showErrorAlert("Une erreur s'est produite lors du téléchargement. Veuillez réessayer.");
+        }
+    }
+
+    window.shareQRCode = function() {
+        const canvas = document.getElementById('qrCanvas');
+        if (!canvas) {
+            showErrorAlert('Erreur : Canvas non trouvé !');
+            return;
+        }
+
+        canvas.toBlob(function(blob) {
+            const file = new File([blob], "qrcode.png", {
+                type: "image/png"
+            });
+            const shareData = {
+                files: [file],
+                title: 'Mon QR Code',
+                text: 'Voici mon QR Code généré'
+            };
+
+            if (navigator.share && navigator.canShare(shareData)) {
+                navigator.share(shareData)
+                    .then(() => afficherMessageQR('QR Code partagé avec succès !', 'success'))
+                    .catch((error) => {
+                        console.error('Erreur lors du partage:', error);
+                        afficherMessageQR("Erreur lors du partage du QR Code.", "danger");
+                    });
+            } else {
+                afficherMessageQR("Le partage n'est pas pris en charge sur votre appareil ou navigateur.", "danger");
+            }
+        }, 'image/png');
+    }
 });

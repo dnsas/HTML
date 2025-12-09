@@ -50,7 +50,7 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
     logo.src = '/css/eleve/images/logo.png';
 
     logo.onload = function() {
-        const logoSize = canvasSize * 0.3;
+        const logoSize = canvasSize * 1.5;
         const x = (canvas.width / 2) - (logoSize / 2);
         const y = (canvas.height / 2) - (logoSize / 2);
 
@@ -96,4 +96,56 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
             spinner.style.display = 'none';
         }
     };
+
+
+
+
+    function downloadQRCode() {
+        const canvas = document.getElementById('qrCanvas');
+        if (!canvas) {
+            showErrorAlert('Erreur : Canvas non trouvé !');
+            return;
+        }
+
+        try {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'qrcode.png';
+            link.click();
+            showSuccessAlert('QR Code téléchargé avec succès !');
+        } catch (error) {
+            console.error('Error creating download link:', error);
+            showErrorAlert("Une erreur s'est produite lors du téléchargement. Veuillez réessayer.");
+        }
+    }
+
+    function shareQRCode() {
+        const canvas = document.getElementById('qrCanvas');
+        if (!canvas) {
+            showErrorAlert('Erreur : Canvas non trouvé !');
+            return;
+        }
+
+        canvas.toBlob(function(blob) {
+            const file = new File([blob], "qrcode.png", { type: "image/png" });
+            const shareData = {
+                files: [file],
+                title: 'Mon QR Code',
+                text: 'Voici mon QR Code généré'
+            };
+
+            if (navigator.share && navigator.canShare(shareData)) {
+                navigator.share(shareData)
+                    .then(() => showSuccessAlert('QR Code partagé avec succès !'))
+                    .catch((error) => {
+                        console.error('Erreur lors du partage:', error);
+                        showErrorAlert("Erreur lors du partage du QR Code.");
+                    });
+            } else {
+                showErrorAlert("Le partage n'est pas pris en charge sur votre appareil ou navigateur.");
+            }
+        }, 'image/png');
+    }
+
+
 }
