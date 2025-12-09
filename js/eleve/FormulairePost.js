@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Vérifier que tous les champs sont remplis
             if (!nom || !prenom || !classe) {
-                afficherErreurQR("Veuillez remplir tous les champs !");
+                afficherMessageQR("Veuillez remplir tous les champs !", "danger");
                 return;
             }
 
