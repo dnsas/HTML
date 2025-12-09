@@ -307,3 +307,72 @@ div.home img:hover {
         width: 90px;
     }
 }
+
+
+/* Ajoutez ces styles à votre fichier home.css */
+
+
+/* Styles pour le bouton avec spinner */
+
+.send-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 25px;
+    outline: none;
+    border: 2px solid transparent;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.5s;
+    background-color: white;
+    color: black;
+    width: 100%;
+}
+
+.send-btn:hover {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+
+/* Spinner dans le bouton */
+
+.send-btn .button-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+
+/* Quand le bouton est en chargement */
+
+.send-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.send-btn.loading .btn-text,
+.send-btn.loading .fa-user-plus {
+    display: none;
+}
+
+.send-btn.loading .button-spinner {
+    display: block !important;
+}
+
+
+/* Masquer le gros spinner plein écran si vous ne l'utilisez plus */
+
+#loading-spinner {
+    /* Gardez-le mais peut-être moins visible */
+    background-color: rgba(0, 0, 0, 0.3);
+}

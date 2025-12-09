@@ -74,7 +74,11 @@
                 <!-- Champ caché pour la requête SQL qui sera rempli dynamiquement -->
                 <input type="hidden" name="requete" id="sqlRequete">
 
-                <button type="submit" class="send-btn"> <i class="fa-solid fa-user-plus"> Envoyer </i></button>
+                <button type="submit" class="send-btn" id="submitBtn">
+    <i class="fa-solid fa-user-plus"></i>
+    <span class="btn-text">Envoyer</span>
+    <div class="button-spinner" style="display:none;"></div>
+</button>
             </form>
 
             <div id="qrCanvasContainer"></div>
@@ -86,8 +90,10 @@
                 <div class="button-container">
                     <button id="downloadBtn" style="display:none;" onclick="downloadQRCode()">
                     <i class="fa-solid fa-download"></i>
+                    <div class="button-spinner" style="display:none;"></div>
                 </button>
                     <button id="shareBtn" style="display:none;" onclick="shareQRCode()">
+                    <div class="button-spinner" style="display:none;"></div>
                     <i class="fa-solid fa-share-nodes"></i>
                 </button>
                 </div>

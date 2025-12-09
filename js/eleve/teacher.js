@@ -1,10 +1,4 @@
-// /js/eleve/teacher.js
-// Version adaptée pour MySQL
-
-
-// Initialisation Firebase (optionnelle - gardée pour d'autres fonctionnalités si nécessaire)
-// firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
+// /js/eleve/teacher.js - Version adaptée avec spinner dans le bouton de connexion
 
 let isAuthenticated = false;
 
@@ -16,6 +10,25 @@ function hideLoadingSpinner() {
     document.getElementById('loading-spinner').style.display = 'none';
 }
 
+// Fonctions pour gérer le spinner dans le bouton de connexion
+function showLoginButtonSpinner() {
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.classList.add('loading');
+        loginBtn.disabled = true;
+        console.log("Spinner activé dans le bouton de connexion");
+    }
+}
+
+function hideLoginButtonSpinner() {
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+        console.log("Spinner désactivé dans le bouton de connexion");
+    }
+}
+
 function checkEnter(event) {
     if (event.key === "Enter") {
         checkPassword();
@@ -23,8 +36,29 @@ function checkEnter(event) {
 }
 
 function checkPassword() {
+    // Activer le spinner DANS LE BOUTON DE CONNEXION
+    showLoginButtonSpinner();
+
+    // Afficher aussi le spinner plein écran (optionnel)
     showLoadingSpinner();
+
     const passwordInput = document.getElementById('passwordInput').value;
+
+    // Temps minimum d'affichage du spinner
+    const tempsDebut = Date.now();
+    const tempsMinimum = 1500; // 1.5 secondes minimum
+
+    // Fonction pour masquer les spinners avec délai minimum
+    function masquerSpinnersAvecDelai() {
+        const tempsEcoule = Date.now() - tempsDebut;
+        const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+        setTimeout(() => {
+            hideLoginButtonSpinner();
+            hideLoadingSpinner();
+            console.log("Spinners masqués après délai");
+        }, tempsRestant);
+    }
 
     // Préparer les données pour la requête PHP
     const formData = new FormData();
@@ -51,12 +85,12 @@ function checkPassword() {
             } else {
                 afficherMessageQR(data.message || "Mot de passe incorrect. Veuillez réessayer.", 'danger');
             }
-            hideLoadingSpinner();
+            masquerSpinnersAvecDelai();
         })
         .catch((error) => {
             afficherMessageQR("Erreur lors de la vérification du mot de passe. Veuillez réessayer.", 'danger');
-            hideLoadingSpinner();
             console.error("Erreur:", error);
+            masquerSpinnersAvecDelai();
         });
 }
 
@@ -70,7 +104,12 @@ function chargerClasses() {
         console.error("Utilisateur non authentifié");
         return;
     }
+
+    // Afficher le spinner pendant le chargement des classes
     showLoadingSpinner();
+
+    const tempsDebut = Date.now();
+    const tempsMinimum = 1000; // 1 seconde minimum
 
     // Requête pour récupérer les classes distinctes
     const requeteSQL = "SELECT DISTINCT classe FROM eleves ORDER BY classe";
@@ -94,11 +133,24 @@ function chargerClasses() {
                     selectElement.appendChild(option);
                 });
             }
-            hideLoadingSpinner();
+
+            // Délai minimum avant de masquer le spinner
+            const tempsEcoule = Date.now() - tempsDebut;
+            const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+            setTimeout(() => {
+                hideLoadingSpinner();
+            }, tempsRestant);
         })
         .catch((error) => {
             console.error("Erreur lors du chargement des classes:", error);
-            hideLoadingSpinner();
+
+            const tempsEcoule = Date.now() - tempsDebut;
+            const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+            setTimeout(() => {
+                hideLoadingSpinner();
+            }, tempsRestant);
         });
 }
 
@@ -111,7 +163,12 @@ function afficherDonnees() {
         console.error("Utilisateur non authentifié");
         return;
     }
+
+    // Afficher le spinner pendant le chargement des données
     showLoadingSpinner();
+
+    const tempsDebut = Date.now();
+    const tempsMinimum = 1000; // 1 seconde minimum
 
     const classeSelectionnee = document.getElementById('classeSelect').value;
     let requeteSQL = "SELECT * FROM eleves";
@@ -140,7 +197,7 @@ function afficherDonnees() {
                     const nomTronque = tronquerTexte(eleve.nom, 15);
                     const prenomTronque = tronquerTexte(eleve.prenom, 15);
                     const classeTronquee = tronquerTexte(eleve.classe, 20);
-                    const eleveId = eleve.id || eleve.nom + "_" + eleve.prenom; // ID unique
+                    const eleveId = eleve.id || eleve.nom + "_" + eleve.prenom;
 
                     html += `
                     <div class="eleve-card" data-eleve-id="${eleveId}">
@@ -174,7 +231,14 @@ function afficherDonnees() {
                     nombreElevesElement.textContent = "Nombre d'élèves : 0";
                 }
             }
-            hideLoadingSpinner();
+
+            // Délai minimum avant de masquer le spinner
+            const tempsEcoule = Date.now() - tempsDebut;
+            const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+            setTimeout(() => {
+                hideLoadingSpinner();
+            }, tempsRestant);
         })
         .catch((error) => {
             console.error("Erreur lors de la récupération des données:", error);
@@ -183,7 +247,13 @@ function afficherDonnees() {
             if (nombreElevesElement) {
                 nombreElevesElement.textContent = "Nombre d'élèves : 0";
             }
-            hideLoadingSpinner();
+
+            const tempsEcoule = Date.now() - tempsDebut;
+            const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+            setTimeout(() => {
+                hideLoadingSpinner();
+            }, tempsRestant);
         });
 }
 
@@ -201,7 +271,11 @@ function supprimerEleve(nom, prenom, classe) {
     confirmationDialog.style.display = 'flex';
 
     document.getElementById('confirm-yes').onclick = function() {
+        // Afficher le spinner pendant la suppression
         showLoadingSpinner();
+
+        const tempsDebut = Date.now();
+        const tempsMinimum = 1000; // 1 seconde minimum
 
         // Construire la requête DELETE
         const requeteSQL = `DELETE FROM eleves WHERE nom = '${nom}' AND prenom = '${prenom}' AND classe = '${classe}'`;
@@ -221,13 +295,25 @@ function supprimerEleve(nom, prenom, classe) {
                     afficherMessageQR(`Erreur lors de la suppression de l'élève ${nomComplet}.`, 'danger');
                 }
                 confirmationDialog.style.display = 'none';
-                hideLoadingSpinner();
+
+                const tempsEcoule = Date.now() - tempsDebut;
+                const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+                setTimeout(() => {
+                    hideLoadingSpinner();
+                }, tempsRestant);
             })
             .catch((error) => {
                 console.error("Erreur lors de la suppression:", error);
                 afficherMessageQR(`Erreur lors de la suppression de l'élève ${nomComplet}.`, 'danger');
                 confirmationDialog.style.display = 'none';
-                hideLoadingSpinner();
+
+                const tempsEcoule = Date.now() - tempsDebut;
+                const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
+
+                setTimeout(() => {
+                    hideLoadingSpinner();
+                }, tempsRestant);
             });
     };
 

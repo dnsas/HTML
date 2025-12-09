@@ -1,43 +1,37 @@
-// /js/eleve/FormulairePost.js
-// Gestion spécifique pour le formulaire d'insertion d'élèves
+// /js/eleve/FormulairePost.js - Version adaptée avec spinner dans le bouton
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("FormulairePost.js chargé - Gestion des formulaires d'insertion");
 
-    // Cibler spécifiquement le formulaire de génération QR qui doit insérer des données
     const formulaireQR = document.querySelector('.formulairePourBDEtudiant.no-gestion-formulaire');
+    const submitBtn = document.getElementById('submitBtn');
 
     if (formulaireQR) {
         formulaireQR.addEventListener('submit', function(evt) {
             console.log("Formulaire QR soumis (géré par FormulairePost.js)");
             evt.preventDefault();
-            evt.stopImmediatePropagation(); // Empêche home.monqr.js de s'exécuter
+            evt.stopImmediatePropagation();
 
-            // Récupérer les valeurs du formulaire
             const nom = this.querySelector('.nom').value.trim();
             const prenom = this.querySelector('.prenom').value.trim();
             const classe = this.querySelector('.classe').value.trim();
 
             console.log(`Données récupérées: ${nom}, ${prenom}, ${classe}`);
 
-            // Vérifier que tous les champs sont remplis
             if (!nom || !prenom || !classe) {
                 afficherMessageQR("Veuillez remplir tous les champs !", "danger");
                 return;
             }
 
-            // Afficher le spinner de chargement
-            const spinner = document.getElementById('loading-spinner');
-            if (spinner) {
-                spinner.style.display = 'block';
-            }
+            // Activer le spinner DANS LE BOUTON ENVOYER
+            showSubmitButtonSpinner();
 
+            // Temps minimum d'affichage du spinner dans le bouton
+            const tempsDebutSpinner = Date.now();
+            const tempsMinimumSpinner = 2000; // 2 secondes minimum
 
-            // Créer la date pour MySQL (format YYYY-MM-DD HH:MM:SS)
             const maintenant = new Date();
             const dateMySQL = maintenant.toISOString().slice(0, 19).replace('T', ' ');
-
-            // Date formatée pour le QR Code
             const dateQR = maintenant.toLocaleString('fr-FR', {
                 day: 'numeric',
                 month: 'long',
@@ -47,18 +41,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 second: '2-digit',
             });
 
-
-            // Construire la requête SQL INSERT
             const requeteSQL = `INSERT INTO eleves (nom, prenom, classe, dateCreation) VALUES ('${nom}', '${prenom}', '${classe}', '${dateMySQL}')`;
             console.log("Requête SQL générée:", requeteSQL);
 
+            // Fonction pour masquer le spinner avec délai minimum
+            function masquerSpinnerAvecDelai() {
+                const tempsEcoule = Date.now() - tempsDebutSpinner;
+                const tempsRestant = Math.max(0, tempsMinimumSpinner - tempsEcoule);
 
+                setTimeout(() => {
+                    hideSubmitButtonSpinner();
+                    console.log("Spinner du bouton masqué après délai");
+                }, tempsRestant);
+            }
 
-            // Préparer les données à envoyer
             const formData = new FormData();
             formData.append("texteRequete", requeteSQL);
 
-            // Utiliser le nouveau fichier PHP pour les INSERT
             fetch('/php/soumettreRequete2.php', {
                     method: 'POST',
                     body: formData
@@ -73,103 +72,114 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log("Réponse du serveur:", resultats);
 
                     if (resultats.success) {
-                        // Afficher un message de succès
                         afficherMessageQR(`✅ Élève ajouté avec succès! `, 'success');
-                        genererQRCodeApresInsertion(nom, prenom, classe, dateQR, resultats);
-                        // Générer le QR code (si votre code home.monqr.js le fait)
-                        // Vous pourriez appeler une fonction de home.monqr.js ici
 
                         // Réinitialiser le formulaire
-                        //this.reset();
+                        this.reset();
 
-                        // Exécuter une requête SELECT pour afficher les données mises à jour
+                        // Délai supplémentaire avant de générer le QR Code
+                        setTimeout(() => {
+                            genererQRCodeApresInsertion(nom, prenom, classe, dateQR, resultats);
+                        }, 500); // 0.5 seconde après la réponse
 
                     } else {
-                        afficherErreurQR("❌ Erreur: " + (resultats.message || resultats.error), "danger");
+                        afficherMessageQR("❌ Erreur: " + (resultats.message || resultats.error), "danger");
                     }
+
+                    masquerSpinnerAvecDelai();
                 })
                 .catch(erreur => {
-                    afficherErreurQR("❌ Erreur de connexion: " + erreur.message);
+                    afficherMessageQR("❌ Erreur de connexion: " + erreur.message, "danger");
                     console.error("Erreur fetch:", erreur);
-                })
-                .finally(() => {
-                    // Cacher le spinner
-                    if (spinner) {
-                        spinner.style.display = 'none';
-                    }
+                    masquerSpinnerAvecDelai();
                 });
         });
     }
 
+    // Fonctions pour gérer le spinner du bouton Envoyer
+    function showSubmitButtonSpinner() {
+        if (submitBtn) {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            console.log("Spinner activé dans le bouton Envoyer");
+        }
+    }
 
-    // Fonction pour générer le QR Code après insertion
+    function hideSubmitButtonSpinner() {
+        if (submitBtn) {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+            console.log("Spinner désactivé dans le bouton Envoyer");
+        }
+    }
+
+    // Fonction pour générer le QR Code après insertion AVEC DÉLAI
     function genererQRCodeApresInsertion(nom, prenom, classe, dateQR, resultatsInsertion) {
         console.log("Déclenchement de la génération du QR Code...");
 
-        // Créer un événement personnalisé avec les données
-        const qrEvent = new CustomEvent('genererQRCode', {
-            detail: {
-                nom: nom,
-                prenom: prenom,
-                classe: classe,
-                date: dateQR,
-                insertionReussie: resultatsInsertion.success || false
-            }
-        });
+        // Délai avant de déclencher l'événement
+        setTimeout(() => {
+            console.log("Déclenchement de l'événement genererQRCode");
 
-        // Déclencher l'événement sur le document
-        document.dispatchEvent(qrEvent);
+            const qrEvent = new CustomEvent('genererQRCode', {
+                detail: {
+                    nom: nom,
+                    prenom: prenom,
+                    classe: classe,
+                    date: dateQR,
+                    insertionReussie: resultatsInsertion.success || false
+                }
+            });
+
+            document.dispatchEvent(qrEvent);
+
+        }, 1000); // 1 seconde de délai
     }
-
 
     // Fonctions d'affichage de messages
     function afficherMessageQR(message, type) {
         const container = document.querySelector('.alert-container');
         if (!container) return;
 
-        // Supprimer les anciens messages
-        const anciensMessages = container.querySelectorAll('.alert-container');
+        const anciensMessages = container.querySelectorAll('.alert');
         anciensMessages.forEach(msg => msg.remove());
 
         const messageDiv = document.createElement('div');
-        messageDiv.className = ` alert alert-${type} show`;
+        messageDiv.className = `alert alert-${type} show`;
         messageDiv.textContent = message;
 
         container.appendChild(messageDiv);
 
-        // Auto-suppression après 5 secondes
         setTimeout(() => {
             if (messageDiv.parentNode) {
                 messageDiv.parentNode.removeChild(messageDiv);
             }
-        }, 45000);
+        }, 5000);
     }
-
-
 
     window.downloadQRCode = function() {
         const canvas = document.getElementById('qrCanvas');
         if (!canvas) {
-            showErrorAlert('Erreur : Canvas non trouvé !');
+            afficherMessageQR('Erreur : Canvas non trouvé !', 'danger');
             return;
         }
 
         try {
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
-            link.download = 'qrcode.png';
+            link.download = 'qrcode-' + Date.now() + '.png';
             link.click();
-            showSuccessAlert('QR Code téléchargé avec succès !');
+            afficherMessageQR('✅ QR Code téléchargé avec succès !', 'success');
         } catch (error) {
             console.error('Error creating download link:', error);
-            showErrorAlert("Une erreur s'est produite lors du téléchargement. Veuillez réessayer.");
+            afficherMessageQR("Une erreur s'est produite lors du téléchargement", 'danger');
         }
     }
 
     window.shareQRCode = function() {
         const canvas = document.getElementById('qrCanvas');
         if (!canvas) {
-            showErrorAlert('Erreur : Canvas non trouvé !');
+            afficherMessageQR('Erreur : Canvas non trouvé !', 'danger');
             return;
         }
 
