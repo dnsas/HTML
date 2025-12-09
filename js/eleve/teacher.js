@@ -1,16 +1,10 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyAzq0WiQRklgpSeqPqjnDZcISWGRtywwU4",
-    authDomain: "gestion-des-qrcodes.firebaseapp.com",
-    projectId: "gestion-des-qrcodes",
-    storageBucket: "gestion-des-qrcodes.firebasestorage.app",
-    messagingSenderId: "118022748151",
-    appId: "1:118022748151:web:5a1df3c3eb636bf16b60f2",
-    measurementId: "G-9YMVMQJSRN"
-};
+// /js/eleve/teacher.js
+// Version adaptée pour MySQL
 
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Initialisation Firebase (optionnelle - gardée pour d'autres fonctionnalités si nécessaire)
+// firebase.initializeApp(firebaseConfig);
+// const db = firebase.firestore();
 
 let isAuthenticated = false;
 
@@ -23,33 +17,47 @@ function hideLoadingSpinner() {
 }
 
 function checkEnter(event) {
-    if (event.key === "Enter") { // Vérifie si la touche pressée est "Entrée"
-        checkPassword(); // Appelle la fonction checkPassword
+    if (event.key === "Enter") {
+        checkPassword();
     }
 }
 
-
 function checkPassword() {
     showLoadingSpinner();
-    const passwordInput = document.getElementById('passwordInput');
-    db.collection("settings").doc("auth").get().then((doc) => {
-        if (
-            (doc.exists && doc.data().password === passwordInput.value) ||
-            (doc.exists && doc.data().password2 === passwordInput.value)
-        ) {
-            isAuthenticated = true;
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('container').style.display = 'block';
-            showSuccessAlert("Connexion réussie !");
-            initializePage();
-        } else {
-            showErrorAlert("Mot de passe incorrect. Veuillez réessayer.");
-        }
-        hideLoadingSpinner();
-    }).catch((error) => {
-        showErrorAlert("Erreur lors de la vérification du mot de passe. Veuillez réessayer.");
-        hideLoadingSpinner();
-    });
+    const passwordInput = document.getElementById('passwordInput').value;
+
+    // Préparer les données pour la requête PHP
+    const formData = new FormData();
+    formData.append("password", passwordInput);
+
+    // Appeler le script PHP pour vérifier le mot de passe
+    fetch('/php/verifierPassword.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur HTTP ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                isAuthenticated = true;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('container').style.display = 'block';
+                afficherMessageQR("Connexion réussie !", 'success');
+                initializePage();
+            } else {
+                afficherMessageQR(data.message || "Mot de passe incorrect. Veuillez réessayer.", 'danger');
+            }
+            hideLoadingSpinner();
+        })
+        .catch((error) => {
+            afficherMessageQR("Erreur lors de la vérification du mot de passe. Veuillez réessayer.", 'danger');
+            hideLoadingSpinner();
+            console.error("Erreur:", error);
+        });
 }
 
 function initializePage() {
@@ -63,24 +71,35 @@ function chargerClasses() {
         return;
     }
     showLoadingSpinner();
-    db.collection("eleves").get().then((querySnapshot) => {
-        const classes = new Set();
-        querySnapshot.forEach((doc) => {
-            classes.add(doc.data().classe);
+
+    // Requête pour récupérer les classes distinctes
+    const requeteSQL = "SELECT DISTINCT classe FROM eleves ORDER BY classe";
+    const formData = new FormData();
+    formData.append("texteRequete", requeteSQL);
+
+    fetch('/php/soumettreRequete2.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const classes = data.data.map(row => row.classe);
+                const selectElement = document.getElementById('classeSelect');
+                selectElement.innerHTML = '<option value="">Toutes les classes</option>';
+                classes.forEach((classe) => {
+                    const option = document.createElement('option');
+                    option.value = classe;
+                    option.textContent = classe;
+                    selectElement.appendChild(option);
+                });
+            }
+            hideLoadingSpinner();
+        })
+        .catch((error) => {
+            console.error("Erreur lors du chargement des classes:", error);
+            hideLoadingSpinner();
         });
-        const selectElement = document.getElementById('classeSelect');
-        selectElement.innerHTML = '<option value="">Toutes les classes</option>';
-        classes.forEach((classe) => {
-            const option = document.createElement('option');
-            option.value = classe;
-            option.textContent = classe;
-            selectElement.appendChild(option);
-        });
-        hideLoadingSpinner();
-    }).catch((error) => {
-        console.error("Erreur lors du chargement des classes:", error);
-        hideLoadingSpinner();
-    });
 }
 
 function tronquerTexte(texte, longueurMax) {
@@ -93,126 +112,128 @@ function afficherDonnees() {
         return;
     }
     showLoadingSpinner();
+
     const classeSelectionnee = document.getElementById('classeSelect').value;
-    let query = db.collection("eleves");
+    let requeteSQL = "SELECT * FROM eleves";
 
     if (classeSelectionnee) {
-        query = query.where("classe", "==", classeSelectionnee);
+        requeteSQL += ` WHERE classe = '${classeSelectionnee}'`;
     }
 
-    query.get().then((querySnapshot) => {
-        let html = '';
-        let nombreEleves = 0;
-        querySnapshot.forEach((doc) => {
-            nombreEleves++;
-            const data = doc.data();
-            const nomTronque = tronquerTexte(data.nom, 15);
-            const prenomTronque = tronquerTexte(data.prenom, 15);
-            const classeTronquee = tronquerTexte(data.classe, 20);
-            html += `
-                <div class="eleve-card" data-eleve-id="${doc.id}">
-                    <div class="eleve-card-inner">
-                        <div class="eleve-card-front">
-                            <h3 title="${data.prenom} ${data.nom}">${prenomTronque} ${nomTronque}</h3>
-                            <p title="Classe: ${data.classe}">Classe: ${classeTronquee}</p>
-                            <p>Date de création: ${data.dateCreation}</p>
-                            <button onclick="retournerCarte(this)" class="view-qr-btn">Voir QR Code</button>
-                            <button onclick="supprimerEleve('${doc.id}')" class="delete-btn">Supprimer</button>
-                        </div>
-                        <div class="eleve-card-back">
-                            <div id="qrcode-${doc.id}"></div>
-                            <button onclick="retournerCarte(this)" class="return-btn">Retour</button>
+    requeteSQL += " ORDER BY nom, prenom";
+
+    const formData = new FormData();
+    formData.append("texteRequete", requeteSQL);
+
+    fetch('/php/soumettreRequete2.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                let html = '';
+                let nombreEleves = 0;
+
+                data.data.forEach((eleve) => {
+                    nombreEleves++;
+                    const nomTronque = tronquerTexte(eleve.nom, 15);
+                    const prenomTronque = tronquerTexte(eleve.prenom, 15);
+                    const classeTronquee = tronquerTexte(eleve.classe, 20);
+                    const eleveId = eleve.id || eleve.nom + "_" + eleve.prenom; // ID unique
+
+                    html += `
+                    <div class="eleve-card" data-eleve-id="${eleveId}">
+                        <div class="eleve-card-inner">
+                            <div class="eleve-card-front">
+                                <h3 title="${eleve.prenom} ${eleve.nom}">${prenomTronque} ${nomTronque}</h3>
+                                <p title="Classe: ${eleve.classe}">Classe: ${classeTronquee}</p>
+                                <p>Date de création: ${eleve.dateCreation}</p>
+                                <button onclick="retournerCarte(this)" class="view-qr-btn">Voir QR Code</button>
+                                <button onclick="supprimerEleve('${eleve.nom}', '${eleve.prenom}', '${eleve.classe}')" class="delete-btn">Supprimer</button>
+                            </div>
+                            <div class="eleve-card-back">
+                                <div id="qrcode-${eleveId}"></div>
+                                <button onclick="retournerCarte(this)" class="return-btn">Retour</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+                });
+
+                document.getElementById('eleves-list').innerHTML = html;
+
+                const nombreElevesElement = document.getElementById('nombre-eleves');
+                if (nombreElevesElement) {
+                    nombreElevesElement.textContent = `Nombre d'élèves : ${nombreEleves}`;
+                }
+            } else {
+                document.getElementById('eleves-list').innerHTML = "<p>Aucun élève trouvé.</p>";
+                const nombreElevesElement = document.getElementById('nombre-eleves');
+                if (nombreElevesElement) {
+                    nombreElevesElement.textContent = "Nombre d'élèves : 0";
+                }
+            }
+            hideLoadingSpinner();
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la récupération des données:", error);
+            document.getElementById('eleves-list').innerHTML = "<p>Erreur lors du chargement des données.</p>";
+            const nombreElevesElement = document.getElementById('nombre-eleves');
+            if (nombreElevesElement) {
+                nombreElevesElement.textContent = "Nombre d'élèves : 0";
+            }
+            hideLoadingSpinner();
         });
-        document.getElementById('eleves-list').innerHTML = html;
-
-        const nombreElevesElement = document.getElementById('nombre-eleves');
-        if (nombreElevesElement) {
-            nombreElevesElement.textContent = `Nombre d'élèves : ${nombreEleves}`;
-        }
-        hideLoadingSpinner();
-    }).catch((error) => {
-        console.error("Erreur lors de la récupération des données:", error);
-        document.getElementById('eleves-list').innerHTML = "<p>Erreur lors du chargement des données.</p>";
-
-        const nombreElevesElement = document.getElementById('nombre-eleves');
-        if (nombreElevesElement) {
-            nombreElevesElement.textContent = "Nombre d'élèves : 0";
-        }
-        hideLoadingSpinner();
-    });
 }
 
-function supprimerEleve(eleveId) {
+function supprimerEleve(nom, prenom, classe) {
     if (!isAuthenticated) {
         console.error("Utilisateur non authentifié");
         return;
     }
 
-    // Récupérer les informations de l'élève
-    db.collection("eleves").doc(eleveId).get().then((doc) => {
-        if (doc.exists) {
-            const eleveData = doc.data();
-            const nomComplet = `${eleveData.prenom} ${eleveData.nom}`;
+    const nomComplet = `${prenom} ${nom}`;
+    const confirmationMessage = document.getElementById('confirmation-message');
+    confirmationMessage.textContent = `Êtes-vous sûr de vouloir supprimer l'élève ${nomComplet} ?`;
 
-            // Mettre à jour le message de confirmation
-            const confirmationMessage = document.getElementById('confirmation-message');
-            confirmationMessage.textContent = `Êtes-vous sûr de vouloir supprimer l'élève ${nomComplet} ?`;
+    const confirmationDialog = document.getElementById('confirmation-dialog');
+    confirmationDialog.style.display = 'flex';
 
-            // Afficher la boîte de dialogue
-            const confirmationDialog = document.getElementById('confirmation-dialog');
-            confirmationDialog.style.display = 'flex';
+    document.getElementById('confirm-yes').onclick = function() {
+        showLoadingSpinner();
 
-            // Gérer le clic sur le bouton "Supprimer"
-            document.getElementById('confirm-yes').onclick = function() {
-                showLoadingSpinner();
-                db.collection("eleves").doc(eleveId).delete().then(() => {
-                    console.log("Élève supprimé avec succès");
-                    showSuccessAlert(`L'élève ${nomComplet} a été supprimé avec succès.`);
+        // Construire la requête DELETE
+        const requeteSQL = `DELETE FROM eleves WHERE nom = '${nom}' AND prenom = '${prenom}' AND classe = '${classe}'`;
+        const formData = new FormData();
+        formData.append("texteRequete", requeteSQL);
+
+        fetch('/php/soumettreRequete2.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    afficherMessageQR(`L'élève ${nomComplet} a été supprimé avec succès.`, 'success');
                     afficherDonnees();
-                    confirmationDialog.style.display = 'none'; // Fermer la boîte de dialogue
-                }).catch((error) => {
-                    console.error("Erreur lors de la suppression de l'élève:", error);
-                    showErrorAlert(`Erreur lors de la suppression de l'élève ${nomComplet}.`);
-                    hideLoadingSpinner();
-                    confirmationDialog.style.display = 'none'; // Fermer la boîte de dialogue
-                });
-            };
+                } else {
+                    afficherMessageQR(`Erreur lors de la suppression de l'élève ${nomComplet}.`, 'danger');
+                }
+                confirmationDialog.style.display = 'none';
+                hideLoadingSpinner();
+            })
+            .catch((error) => {
+                console.error("Erreur lors de la suppression:", error);
+                afficherMessageQR(`Erreur lors de la suppression de l'élève ${nomComplet}.`, 'danger');
+                confirmationDialog.style.display = 'none';
+                hideLoadingSpinner();
+            });
+    };
 
-            // Gérer le clic sur le bouton "Annuler"
-            document.getElementById('confirm-no').onclick = function() {
-                confirmationDialog.style.display = 'none'; // Fermer la boîte de dialogue
-            };
-        } else {
-            console.error("Aucun élève trouvé avec cet ID");
-            showErrorAlert("Erreur : Élève non trouvé.");
-        }
-    }).catch((error) => {
-        console.error("Erreur lors de la récupération des données de l'élève:", error);
-        showErrorAlert("Erreur lors de la récupération des données de l'élève.");
-    });
-}
-
-function showAlert(message, type) {
-    const alertContainer = document.getElementById('alert-container');
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${type}`;
-    alert.textContent = message;
-    alertContainer.appendChild(alert);
-
-    setTimeout(() => {
-        alert.classList.add('show');
-    }, 100);
-
-    setTimeout(() => {
-        alert.classList.remove('show');
-        setTimeout(() => {
-            alertContainer.removeChild(alert);
-        }, 300);
-    }, 3000);
+    document.getElementById('confirm-no').onclick = function() {
+        confirmationDialog.style.display = 'none';
+    };
 }
 
 function voirQRCode(nom, prenom, classe, dateCreation, eleveId) {
@@ -223,9 +244,11 @@ function voirQRCode(nom, prenom, classe, dateCreation, eleveId) {
     const qrData = `Nom: ${encodedNom}, Prenom: ${encodedPrenom}, Classe: ${encodedClasse}, Date de création : ${dateCreation}`;
 
     const qrcodeElement = document.getElementById(`qrcode-${eleveId}`);
+    if (!qrcodeElement) return;
+
     qrcodeElement.innerHTML = '';
 
-    const containerWidth = qrcodeElement.offsetWidth;
+    const containerWidth = qrcodeElement.offsetWidth || 150;
 
     const canvas = document.createElement('canvas');
     canvas.width = containerWidth;
@@ -240,16 +263,14 @@ function voirQRCode(nom, prenom, classe, dateCreation, eleveId) {
 
     const logo = new Image();
     logo.crossOrigin = "anonymous";
-    logo.src = 'logo.png';
+    logo.src = '/css/eleve/images/logo.png';
     logo.onload = function() {
         const ctx = canvas.getContext('2d');
         if (ctx) {
-            const logoSize = containerWidth * 1.5;
+            const logoSize = containerWidth * 0.3;
             const x = (canvas.width / 2) - (logoSize / 2);
             const y = (canvas.height / 2) - (logoSize / 2);
             ctx.drawImage(logo, x, y, logoSize, logoSize);
-        } else {
-            console.error('Unable to get 2D context from canvas');
         }
     };
 }
@@ -272,38 +293,41 @@ function retourAccueil() {
     window.location.href = 'home.html';
 }
 
-function showAlert(message, type) {
-    const alertContainer = document.getElementById('alert-container');
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${type}`;
-    alert.textContent = message;
-    alertContainer.appendChild(alert);
+// Fonction d'affichage des messages adaptée
+function afficherMessageQR(message, type) {
+    const container = document.querySelector('.alert-container');
+    if (!container) return;
 
-    setTimeout(() => {
-        alert.classList.add('show');
-    }, 100);
+    // Vider le contenu existant
+    container.innerHTML = '';
 
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert alert-${type} show`;
+    messageDiv.textContent = message;
+
+    container.appendChild(messageDiv);
+
+    // Auto-suppression après 5 secondes
     setTimeout(() => {
-        alert.classList.remove('show');
-        setTimeout(() => {
-            alertContainer.removeChild(alert);
-        }, 300);
-    }, 3000);
+        if (messageDiv.parentNode) {
+            messageDiv.parentNode.removeChild(messageDiv);
+        }
+    }, 5000);
 }
 
+// Fonctions d'alerte compatibilité (redirigent vers afficherMessageQR)
 function showSuccessAlert(message) {
-    showAlert(message, 'success');
+    afficherMessageQR(message, 'success');
 }
 
 function showErrorAlert(message) {
-    showAlert(message, 'danger');
+    afficherMessageQR(message, 'danger');
 }
 
-
+// Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'flex';
 });
-
 
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('passwordInput');
@@ -311,7 +335,7 @@ function togglePasswordVisibility() {
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         togglePassword.classList.remove('fa-eye');
-        togglePassword.classList.add('fa-eye-slash'); // Change l'icône
+        togglePassword.classList.add('fa-eye-slash');
     } else {
         passwordInput.type = 'password';
         togglePassword.classList.remove('fa-eye-slash');
