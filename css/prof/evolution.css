@@ -1,0 +1,90 @@
+/* /css/prof/evolution.css */
+
+
+/* Conteneur 3D */
+
+.flip-card-container {
+    background-color: transparent;
+    width: 300px;
+    height: 420px;
+    /* Hauteur fixe nécessaire pour l'effet 3D */
+    perspective: 1000px;
+    /* Donne la profondeur */
+}
+
+
+/* L'enveloppe qui tourne */
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+
+/* La classe ajoutée par le JS pour tourner la carte */
+
+.flip-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+
+/* Styles communs aux deux faces (On reprend ton style .card de base) */
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    /* Cache le dos */
+    backface-visibility: hidden;
+    /* Ton style .card original copié ici pour l'uniformité */
+    border-radius: 10px;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* Style spécifique Face Arrière */
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    background: radial-gradient(circle at 50% 0%, #ffeaa7 36%, #ffffff 36%);
+    /* Un fond doré pour l'évolution */
+    border: 2px solid #ffd700;
+    /* Bordure dorée */
+}
+
+
+/* Le bouton pour tourner */
+
+.btn-evolution {
+    margin-top: auto;
+    /* Pousse le bouton vers le bas */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #121212;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.8s ease;
+}
+
+.btn-evolution:hover {
+    background-color: white;
+    color: #121212;
+    border: 2px solid black;
+}
+
+.btn-retour {
+    background-color: #607d8b;
+}

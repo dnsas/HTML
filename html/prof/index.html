@@ -7,42 +7,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
     <script src="/js/prof/gestionFormulaire.js" defer></script>
+    <script src="/js/prof/evolution.js" defer></script>
     <link rel="stylesheet" href="/css/prof/styles.css">
+    <link rel="stylesheet" href="/css/prof/evolution.css">
 </head>
 
 <body>
-
+    <section class="navigation">
+        <nav class="navbar">
+            <a class="navbar-brand" href="/"><img src="/css/prof/images/pokemon.png" alt="Logo du site"></a>
+            <a class="nav-link" href="table.html"> TABLE (Ancienne vue)</a>
+            <a class="nav-link" href="marequete.html"> Taper ma propre Requête</a>
+        </nav>
+    </section>
     <h1>Encyclopédie Pokémon</h1>
-
-    <nav>
-        <a href="table.html"> TABLE (Ancienne vue)</a>
-        <a href="marequete.html"> Taper ma propre Requête</a>
-    </nav>
 
     <form class="formulairePourBDProf">
         <h2>Trouvez votre Pokémon !</h2>
         <label for="requete">Choisir une requête :</label>
         <select name="requete" id="requete">
             
-            <option value="SELECT *,
-    pokemons.id,
-    pokemons.nom,
-    types.libelle,
-    attaques.libelle
-FROM pokemons
-JOIN est_type 
-    ON pokemons.id = est_type.pokemon_id
-JOIN types 
-    ON est_type.type_id = types.id
-JOIN attaques 
-    ON types.id = attaques.type_id
-">Tous les Pokémon (Simple)</option>
-            
             <option value="SELECT pokemons.id, pokemons.nom, types.libelle FROM pokemons JOIN est_type ON pokemons.id = est_type.pokemon_id JOIN types ON est_type.type_id = types.id;">Pokémon avec Types (Couleurs)</option>
             
             <option value="SELECT * FROM attaques">Toutes les attaques</option>
             
-            <option value="SELECT p_base.nom AS 'Base', p_evo.nom AS 'Evolution', evolue_en.niveau FROM evolue_en JOIN pokemons p_base ON p_base.id = evolue_en.pokemon_base_id JOIN pokemons p_evo ON p_evo.id = evolue_en.pokemon_evol_id;">Evolutions</option>
+<option value="
+SELECT 
+    p_base.id AS 'BaseID',
+    p_evo.id AS 'EvoID',
+    p_base.nom AS 'Base',
+    p_evo.nom AS 'Evolution'
+FROM evolue_en
+JOIN pokemons p_base ON p_base.id = evolue_en.pokemon_base_id
+JOIN pokemons p_evo ON p_evo.id = evolue_en.pokemon_evol_id;
+">
+    Evolutions
+</option>
         </select>
 
         <div id="zonePerso" style="display:none; margin-top:10px;">

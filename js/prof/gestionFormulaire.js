@@ -57,26 +57,22 @@ formulaires.forEach(unFormulaire => unFormulaire.addEventListener("submit", exec
 function executerRequete(evt) {
     console.log("Le formulaire a été validé");
     evt.preventDefault();
-
     const formulaireValidé = evt.target;
     let BDLocale = false;
     let erreurDeBD = false;
 
-    // Détection de la base de données
     if (formulaireValidé.classList.contains("formulairePourBDEtudiant")) {
         BDLocale = true;
     } else if (!formulaireValidé.classList.contains("formulairePourBDProf")) {
         erreurDeBD = true;
     }
 
-    // Nettoyage de l'interface
     const conteneurResultats = document.querySelector('.affichageBD');
     conteneurResultats.innerHTML = '';
     if (document.querySelector('.messageErreur')) {
         document.querySelector('.messageErreur').remove();
     }
 
-    // Récupération de la requête
     const elementDeSaisieRadio = formulaireValidé.querySelector('[name=requete]:checked');
     let texteRequete = elementDeSaisieRadio ?
         elementDeSaisieRadio.value :
@@ -87,11 +83,7 @@ function executerRequete(evt) {
     if (!erreurDeBD) {
         let donneesDuFormulaire = new FormData();
         donneesDuFormulaire.append("texteRequete", texteRequete)
-
-        const optionsAjax = {
-            "method": "POST",
-            "body": donneesDuFormulaire
-        }
+        const optionsAjax = { "method": "POST", "body": donneesDuFormulaire }
 
         fetch(adresseDesDonnees, optionsAjax)
             .then(response => response.json())
@@ -105,7 +97,6 @@ function executerRequete(evt) {
 
 function afficherResultatsRequete(enregistrements) {
     console.log("Données reçues : ", enregistrements);
-
     const conteneur = document.querySelector('.affichageBD');
     conteneur.innerHTML = '';
 
@@ -114,13 +105,21 @@ function afficherResultatsRequete(enregistrements) {
         return;
     }
 
-    // Pour chaque résultat SQL, on crée une carte
     enregistrements.forEach(function(data) {
+        // --- 1. DÉTECTION SPECIALE : EST-CE UNE REQUETE D'EVOLUTION ? ---
+        // On regarde si les colonnes spécifiques 'BaseID' et 'EvoID' existent
+        if (data.BaseID && data.EvoID) {
+            const carteContainer = document.createElement('div');
+            carteContainer.className = 'flip-card-container'; // Classe du fichier evolution.css
+            // On appelle la fonction du fichier evolution.js
+            carteContainer.innerHTML = genererCarteEvolutionHTML(data);
+            conteneur.appendChild(carteContainer);
+            return; // On passe à l'enregistrement suivant, on ne fait pas le code standard
+        }
 
-        // --- 1. Extraction des données ---
+        // --- 2. CODE STANDARD (POUR TOUTES LES AUTRES REQUETES) ---
         const id = data.id || data.ID || data.pokemon_id;
         const name = data.nom || data.NOM || data.libelle || "Inconnu";
-
         let typePrincipal = "Normal";
         if (data.type_libelle) typePrincipal = data.type_libelle;
         else if (data.libelle && !data.puissance) typePrincipal = data.libelle;
@@ -133,13 +132,9 @@ function afficherResultatsRequete(enregistrements) {
         carte.style.background = `radial-gradient(circle at 50% 0%, ${themeColor} 36%, #ffffff 36%)`;
 
         let innerHTMLContent = '';
-
         const hpVal = data.hp || data.pv;
         if (hpVal) {
-            innerHTMLContent += `
-                <p class="hp">
-                    <span>HP</span> ${hpVal}
-                </p>`;
+            innerHTMLContent += `<p class="hp"><span>HP</span> ${hpVal}</p>`;
         } else {
             innerHTMLContent += `<div style="height: 35px;"></div>`;
         }
@@ -152,10 +147,7 @@ function afficherResultatsRequete(enregistrements) {
         innerHTMLContent += `<h2 class="poke-name">${name}</h2>`;
 
         if (typePrincipal && typePrincipal !== "Inconnu" && typePrincipal !== name) {
-            innerHTMLContent += `
-                <div class="types">
-                    <span style="background-color: ${themeColor};">${typePrincipal}</span>
-                </div>`;
+            innerHTMLContent += `<div class="types"><span style="background-color: ${themeColor};">${typePrincipal}</span></div>`;
         } else {
             innerHTMLContent += `<div class="types" style="height:28px"></div>`;
         }
@@ -166,28 +158,9 @@ function afficherResultatsRequete(enregistrements) {
 
         if (attack !== undefined || defense !== undefined || speed !== undefined) {
             innerHTMLContent += `<div class="stats">`;
-
-            if (attack !== undefined) {
-                innerHTMLContent += `
-                    <div>
-                        <h3>${attack}</h3>
-                        <p>Attaque</p>
-                    </div>`;
-            }
-            if (defense !== undefined) {
-                innerHTMLContent += `
-                    <div>
-                        <h3>${defense}</h3>
-                        <p>Défense</p>
-                    </div>`;
-            }
-            if (speed !== undefined) {
-                innerHTMLContent += `
-                    <div>
-                        <h3>${speed}</h3>
-                        <p>Vitesse</p>
-                    </div>`;
-            }
+            if (attack !== undefined) innerHTMLContent += `<div><h3>${attack}</h3><p>Attaque</p></div>`;
+            if (defense !== undefined) innerHTMLContent += `<div><h3>${defense}</h3><p>Défense</p></div>`;
+            if (speed !== undefined) innerHTMLContent += `<div><h3>${speed}</h3><p>Vitesse</p></div>`;
             innerHTMLContent += `</div>`;
         } else {
             let extraInfo = "";

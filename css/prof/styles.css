@@ -155,13 +155,6 @@ h1 {
 
 /* --- 3. Navigation et Formulaire (Style sombre/Glassmorphism) --- */
 
-nav a {
-    color: #00bcd4;
-    margin: 0 10px;
-    text-decoration: none;
-    font-weight: 500;
-}
-
 .formulairePourBDProf {
     max-width: 500px;
     margin: 0 auto 30px auto;
@@ -387,4 +380,112 @@ table td:first-child {
 
 table .centre {
     text-align: center;
+}
+
+
+/*NAVBAR*/
+
+.navbar {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(50px);
+    height: 56px;
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    padding: 0 20px;
+    width: auto;
+    max-width: 90%;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+    white-space: nowrap;
+}
+
+.navbar a:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* Téléphones */
+
+@media (max-width: 768px) {
+    .navbar {
+        width: 90%;
+        height: 48px;
+        top: 10px;
+        left: 5%;
+        transform: translateX(0);
+        gap: 8px;
+        border-radius: 20px;
+    }
+    .navbar a {
+        font-size: 14px;
+        padding: 0 5px;
+    }
+}
+
+
+/* Téléphones (version ajustée) */
+
+@media (max-width: 768px) {
+    .navbar {
+        width: 95%;
+        height: 48px;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 8px;
+        border-radius: 20px;
+    }
+    .navbar a {
+        font-size: 14px;
+        padding: 0 5px;
+    }
+}
+
+
+/* Très petits écrans */
+
+@media (max-width: 480px) {
+    .navbar {
+        height: 44px;
+        top: 5px;
+    }
+    .navbar a {
+        font-size: 13px;
+        padding: 0 3px;
+    }
+}
+
+
+/* Font */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* Logo */
+
+a.navbar-brand img {
+    height: 10vh;
 }
