@@ -7,9 +7,7 @@
     background-color: transparent;
     width: 300px;
     height: 420px;
-    /* Hauteur fixe nécessaire pour l'effet 3D */
     perspective: 1000px;
-    /* Donne la profondeur */
 }
 
 
@@ -32,7 +30,7 @@
 }
 
 
-/* Styles communs aux deux faces (On reprend ton style .card de base) */
+/* Styles communs aux deux faces */
 
 .flip-card-front,
 .flip-card-back {
@@ -40,12 +38,9 @@
     width: 100%;
     height: 100%;
     -webkit-backface-visibility: hidden;
-    /* Cache le dos */
     backface-visibility: hidden;
-    /* Ton style .card original copié ici pour l'uniformité */
     border-radius: 10px;
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
-    background-color: white;
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
@@ -53,50 +48,178 @@
 }
 
 
-/* Style spécifique Face Arrière */
+/* Style spécifique Face Avant (pour les évolutions) */
+
+.flip-card-front {
+    background-color: white;
+}
+
+
+/* Style spécifique Face Arrière (pour les évolutions) */
 
 .flip-card-back {
     transform: rotateY(180deg);
     background: radial-gradient(circle at 50% 0%, #ffeaa7 36%, #ffffff 36%);
-    /* Un fond doré pour l'évolution */
     border: 2px solid #ffd700;
-    /* Bordure dorée */
 }
 
 
-/* Le bouton pour tourner */
+/* Bouton avec animation (Voir Évolution seulement) */
 
 .btn-evolution {
-    margin-top: auto;
-    /* Pousse le bouton vers le bas */
-    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 180px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 100px;
+    overflow: hidden;
+    transition: box-shadow 0.5s ease-in-out, background-color 0.5s ease;
     border: none;
-    border-radius: 20px;
-    background-color: #121212;
-    color: white;
     cursor: pointer;
+    margin: 10px auto;
+}
+
+.btn-evolution::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 150px;
+    background-image: conic-gradient(transparent, transparent, transparent, white);
+    animation: animate 3s linear infinite;
+    will-change: transform;
+    z-index: 0;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.btn-evolution span {
+    position: absolute;
+    inset: 3px;
+    border-radius: 100px;
+    background: #151515;
+    z-index: 1;
+    transition: background-color 0.3s ease;
+}
+
+.btn-evolution button {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: 100px;
+    outline: none;
+    border: none;
     font-weight: bold;
-    transition: background-color 0.8s ease;
+    cursor: pointer;
+    background: transparent;
+    color: whitesmoke;
+    transition: color 0.5s ease, background-color 0.5s ease;
+    font-size: 14px;
 }
 
 .btn-evolution:hover {
+    box-shadow: 0 0 20px 20px rgba(255, 255, 255, 0.2);
     background-color: white;
-    color: #121212;
-    border: 2px solid black;
 }
+
+.btn-evolution:hover button {
+    color: black;
+}
+
+.btn-evolution:hover span {
+    background-color: white;
+}
+
+
+/* Style spécifique pour le bouton Retour sans animation */
 
 .btn-retour {
+    margin-top: auto;
+    padding: 10px 20px;
+    border-radius: 20px;
     background-color: #121212;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.9s ease, color 0.9s ease;
+    width: 180px;
+    height: 50px;
+    margin: 10px auto;
+    display: block;
+}
+
+.btn-retour:hover {
+    background-color: white;
+    color: #121212;
+    border: 2px solid #121212;
 }
 
 
-/* Style spécifique pour le dos de la carte Dresseur */
+/* Gestion de l'affichage du bouton Voir Évolution */
 
-.flip-card-trainer {
-    background: radial-gradient(circle at 50% 0%, #74b9ff 36%, #ffffff 36%) !important;
-    border: 2px solid #3498db !important;
+.flip-card-inner.flipped .flip-card-front .btn-evolution {
+    display: none;
 }
 
-.flip-card-trainer h2 {
-    margin-top: 20px;
+.flip-card-inner:not(.flipped) .flip-card-front .btn-evolution {
+    animation: apparitionBtn 0.5s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+}
+
+.flip-card-inner .flip-card-front .btn-evolution {
+    opacity: 1;
+    animation: none;
+}
+
+@keyframes apparitionBtn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Styles pour les éléments de la carte */
+
+.hp {
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.hp span {
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.poke-name {
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* Style spécifique pour le texte "EVO" */
+
+.hp[style*="background-color:#ffd700"] {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }

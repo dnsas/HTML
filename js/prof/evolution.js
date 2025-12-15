@@ -1,10 +1,10 @@
-/* /js/prof/evolution.js */
+/* /js/prof/evolution.js - Version alternative */
 
 /**
  * Fonction appelée par le bouton pour tourner la carte
- * Elle cherche le parent .flip-card-inner et toggle la classe .flipped
  */
 function basculerCarte(bouton) {
+    // Version simplifiée qui fonctionne avec les deux structures
     const carteInterieure = bouton.closest('.flip-card-inner');
     if (carteInterieure) {
         carteInterieure.classList.toggle('flipped');
@@ -12,18 +12,14 @@ function basculerCarte(bouton) {
 }
 
 /**
- * Génère le HTML pour une carte à retourner (Flip Card)
- * @param {Object} data - Données SQL (BaseID, EvoID, Base, Evolution)
- * @returns {string} - HTML complet
+ * Génère le HTML pour une carte à retourner
  */
 function genererCarteEvolutionHTML(data) {
     const baseUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
 
-    // Images
     const imgBase = data.BaseID ? `${baseUrl}${data.BaseID}.png` : "";
     const imgEvo = data.EvoID ? `${baseUrl}${data.EvoID}.png` : "";
 
-    // On utilise ton style de gradient (couleur par défaut ici car pas de type dans la requête)
     const bgBase = `radial-gradient(circle at 50% 0%, #eff3ff 36%, #ffffff 36%)`;
 
     return `
@@ -35,9 +31,13 @@ function genererCarteEvolutionHTML(data) {
                 <h2 class="poke-name">${data.Base}</h2>
             </div>
             
-            <button class="btn-evolution" onclick="basculerCarte(this)">
-                Voir Évolution ↻
-            </button>
+            <div class="btn-evolution">
+                <span></span>
+                <button onclick="basculerCarte(this)">
+                    Voir Évolution ↻
+                </button>
+            </div>
+            
         </div>
 
         <div class="flip-card-back">
@@ -47,7 +47,7 @@ function genererCarteEvolutionHTML(data) {
                 <h2 class="poke-name" style="color: #d35400;">${data.Evolution}</h2>
             </div>
 
-            <button class="btn-evolution btn-retour" onclick="basculerCarte(this)">
+            <button class="btn-retour" onclick="basculerCarte(this)">
                 ↺ Retour
             </button>
         </div>
