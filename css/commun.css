@@ -1,0 +1,47 @@
+/* --- Style du Bouton Accueil (Maison) --- */
+
+.btn-accueil {
+    /* Positionnement */
+    position: fixed;
+    top: 20px;
+    left: 10rem;
+    z-index: 2000;
+    /* Taille réduite (plus discret) */
+    width: 5rem;
+    height: 5rem;
+    /* Forme ronde */
+    border-radius: 50%;
+    /* Couleurs de base (Noir fond / Blanc icône) */
+    background-color: #121212;
+    color: #ffffff;
+    /* Centrage de l'icône */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    /* Enlève le soulignement du lien */
+    /* Transitions fluides */
+    transition: all 0.3s ease-in-out;
+}
+
+
+/* Taille de l'icône FontAwesome */
+
+.btn-accueil i {
+    font-size: 18px;
+    /* Taille de la maison */
+}
+
+
+/* --- Effets au survol (Hover) --- */
+
+.btn-accueil:hover {
+    /* Zoom (Grossit de 15%) */
+    transform: scale(1.15);
+    /* Inversion des couleurs (Blanc fond / Noir icône) */
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #000000;
+    /* Petite ombre lumineuse */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
