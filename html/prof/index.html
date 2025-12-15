@@ -10,6 +10,7 @@
     <script src="/js/prof/evolution.js" defer></script>
     <link rel="stylesheet" href="/css/prof/styles.css">
     <link rel="stylesheet" href="/css/prof/evolution.css">
+    <script src="/js/prof/dresseur.js" defer></script>
 </head>
 
 <body>
@@ -42,6 +43,18 @@ JOIN pokemons p_base ON p_base.id = evolue_en.pokemon_base_id
 JOIN pokemons p_evo ON p_evo.id = evolue_en.pokemon_evol_id;
 ">
     Evolutions
+</option>
+<option value="
+    SELECT 
+        pokemons.id AS pokemon_id, 
+        pokemons.nom AS pokemon_nom, 
+        dresseurs.id AS dresseur_id, 
+        dresseurs.nom AS dresseur_nom 
+    FROM detient_pokemons 
+    JOIN pokemons ON detient_pokemons.pokemon_id = pokemons.id 
+    JOIN dresseurs ON detient_pokemons.dresseur_id = dresseurs.id;
+">
+    Pokemons - Dresseurs (Flip Card)
 </option>
         </select>
 

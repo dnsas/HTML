@@ -106,6 +106,30 @@ function afficherResultatsRequete(enregistrements) {
     }
 
     enregistrements.forEach(function(data) {
+
+        // --- 1. DÉTECTION ÉVOLUTIONS ---
+        if (data.BaseID && data.EvoID) {
+            const carteContainer = document.createElement('div');
+            carteContainer.className = 'flip-card-container';
+            carteContainer.innerHTML = genererCarteEvolutionHTML(data);
+            conteneur.appendChild(carteContainer);
+            return;
+        }
+
+        // --- 2. NOUVEAU : DÉTECTION DRESSEURS ---
+        if (data.pokemon_id && data.dresseur_id) {
+            const carteContainer = document.createElement('div');
+            carteContainer.className = 'flip-card-container';
+            carteContainer.innerHTML = genererCarteDresseurHTML(data);
+            conteneur.appendChild(carteContainer);
+            return;
+        }
+
+
+
+
+
+
         // --- 1. DÉTECTION SPECIALE : EST-CE UNE REQUETE D'EVOLUTION ? ---
         // On regarde si les colonnes spécifiques 'BaseID' et 'EvoID' existent
         if (data.BaseID && data.EvoID) {
