@@ -45,3 +45,39 @@
     /* Petite ombre lumineuse */
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
+
+.input-box {
+    width: 100%;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 25px;
+    outline: none;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding-right: 40px;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 1s ease;
+}
+
+.input-box input:focus {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input-box i {
+    position: absolute;
+    transform: translateY(-50%);
+    right: 20px;
+    top: 50%;
+    color: white;
+}

@@ -1,22 +1,14 @@
-// AJOUTER CES LIGNES au début, après "document.addEventListener('DOMContentLoaded', function() {"
-
-// Écouter l'événement personnalisé pour générer le QR Code
 document.addEventListener('genererQRCode', function(evt) {
     console.log("Événement genererQRCode reçu", evt.detail);
 
     const { nom, prenom, classe, date, insertionReussie } = evt.detail;
 
-    // Générer le QR Code
     genererQRCode(nom, prenom, classe, date, insertionReussie);
 });
 
-// AJOUTER CETTE FONCTION après l'écouteur d'événement :
-
-// Fonction pour générer le QR Code
 function genererQRCode(nom, prenom, classe, date, insertionReussie) {
     console.log("Génération du QR Code...");
 
-    // Afficher le spinner
     const spinner = document.getElementById('loading-spinner');
     if (spinner) {
         spinner.style.display = 'flex';
@@ -56,7 +48,6 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
 
         ctx.drawImage(logo, x, y, logoSize, logoSize);
 
-        // Afficher le QR code
         const qrContainer = document.querySelector('.qr_code');
         if (qrContainer) {
             qrContainer.style.display = 'block';
@@ -68,7 +59,6 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
         if (downloadBtn) downloadBtn.style.display = 'block';
         if (shareBtn) shareBtn.style.display = 'block';
 
-        // Cacher le spinner
         if (spinner) {
             spinner.style.display = 'none';
         }
@@ -79,7 +69,6 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
     logo.onerror = function() {
         console.warn("Logo non chargé, affichage du QR Code sans logo");
 
-        // Afficher le QR code sans logo
         const qrContainer = document.querySelector('.qr_code');
         if (qrContainer) {
             qrContainer.style.display = 'block';
@@ -91,7 +80,6 @@ function genererQRCode(nom, prenom, classe, date, insertionReussie) {
         if (downloadBtn) downloadBtn.style.display = 'block';
         if (shareBtn) shareBtn.style.display = 'block';
 
-        // Cacher le spinner
         if (spinner) {
             spinner.style.display = 'none';
         }

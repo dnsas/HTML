@@ -313,25 +313,28 @@ h1 {
 
 /* --- Style global appliqué à TOUS les tableaux du site --- */
 
+
+/* --- Style du Tableau --- */
+
 table {
     width: 90%;
     margin: 40px auto;
     border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.06);
+    background-color: transparent;
     backdrop-filter: blur(12px);
-    color: #e0e0e0;
+    color: #ffffff;
     font-size: 15px;
-    border-radius: 15px;
+    border-radius: 25px;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease-in-out;
 }
 
 
 /* En-tête du tableau */
 
 table thead {
-    background: #607d8b;
+    background: #121212;
 }
 
 table th {
@@ -339,7 +342,7 @@ table th {
     font-weight: 600;
     font-size: 16px;
     text-align: left;
-    color: white;
+    color: #ffffff;
     letter-spacing: 0.5px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
@@ -350,6 +353,8 @@ table th {
 table td {
     padding: 12px 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s ease;
 }
 
 
@@ -367,19 +372,26 @@ table tbody tr:hover {
 }
 
 
-/* Optionnel : première colonne stylée comme tes labels */
+/* Première colonne stylée comme les labels */
 
 table td:first-child {
     font-weight: 600;
-    color: #ffcc00;
     /* Jaune utilisé dans les cartes Pokémon */
 }
 
 
-/* Optionnel : centrer les cellules avec classe .centre */
+/* Optionnel : centrer les cellules avec la classe .centre */
 
 table .centre {
     text-align: center;
+}
+
+
+/* Focus sur la ligne du tableau (pour l'accessibilité) */
+
+table tr:focus-within {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
 }
 
 

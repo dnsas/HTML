@@ -1,5 +1,3 @@
-// /js/eleve/teacher.js - Version adaptée avec spinner dans le bouton de connexion
-
 let isAuthenticated = false;
 
 function showLoadingSpinner() {
@@ -10,7 +8,6 @@ function hideLoadingSpinner() {
     document.getElementById('loading-spinner').style.display = 'none';
 }
 
-// Fonctions pour gérer le spinner dans le bouton de connexion
 function showLoginButtonSpinner() {
     const loginBtn = document.getElementById('loginBtn');
     if (loginBtn) {
@@ -36,19 +33,15 @@ function checkEnter(event) {
 }
 
 function checkPassword() {
-    // Activer le spinner DANS LE BOUTON DE CONNEXION
     showLoginButtonSpinner();
 
-    // Afficher aussi le spinner plein écran (optionnel)
     showLoadingSpinner();
 
     const passwordInput = document.getElementById('passwordInput').value;
 
-    // Temps minimum d'affichage du spinner
     const tempsDebut = Date.now();
-    const tempsMinimum = 1500; // 1.5 secondes minimum
+    const tempsMinimum = 1500;
 
-    // Fonction pour masquer les spinners avec délai minimum
     function masquerSpinnersAvecDelai() {
         const tempsEcoule = Date.now() - tempsDebut;
         const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
@@ -60,11 +53,9 @@ function checkPassword() {
         }, tempsRestant);
     }
 
-    // Préparer les données pour la requête PHP
     const formData = new FormData();
     formData.append("password", passwordInput);
 
-    // Appeler le script PHP pour vérifier le mot de passe
     fetch('/php/verifierPassword.php', {
             method: 'POST',
             body: formData
@@ -105,13 +96,11 @@ function chargerClasses() {
         return;
     }
 
-    // Afficher le spinner pendant le chargement des classes
     showLoadingSpinner();
 
     const tempsDebut = Date.now();
-    const tempsMinimum = 1000; // 1 seconde minimum
+    const tempsMinimum = 1000;
 
-    // Requête pour récupérer les classes distinctes
     const requeteSQL = "SELECT DISTINCT classe FROM eleves ORDER BY classe";
     const formData = new FormData();
     formData.append("texteRequete", requeteSQL);
@@ -164,11 +153,10 @@ function afficherDonnees() {
         return;
     }
 
-    // Afficher le spinner pendant le chargement des données
     showLoadingSpinner();
 
     const tempsDebut = Date.now();
-    const tempsMinimum = 1000; // 1 seconde minimum
+    const tempsMinimum = 1000; // 1 seconde
 
     const classeSelectionnee = document.getElementById('classeSelect').value;
     let requeteSQL = "SELECT * FROM eleves";
@@ -232,7 +220,6 @@ function afficherDonnees() {
                 }
             }
 
-            // Délai minimum avant de masquer le spinner
             const tempsEcoule = Date.now() - tempsDebut;
             const tempsRestant = Math.max(0, tempsMinimum - tempsEcoule);
 
@@ -271,11 +258,10 @@ function supprimerEleve(nom, prenom, classe) {
     confirmationDialog.style.display = 'flex';
 
     document.getElementById('confirm-yes').onclick = function() {
-        // Afficher le spinner pendant la suppression
         showLoadingSpinner();
 
         const tempsDebut = Date.now();
-        const tempsMinimum = 1000; // 1 seconde minimum
+        const tempsMinimum = 1000; // 1 seconde
 
         // Construire la requête DELETE
         const requeteSQL = `DELETE FROM eleves WHERE nom = '${nom}' AND prenom = '${prenom}' AND classe = '${classe}'`;
@@ -379,12 +365,10 @@ function retourAccueil() {
     window.location.href = 'home.html';
 }
 
-// Fonction d'affichage des messages adaptée
 function afficherMessageQR(message, type) {
     const container = document.querySelector('.alert-container');
     if (!container) return;
 
-    // Vider le contenu existant
     container.innerHTML = '';
 
     const messageDiv = document.createElement('div');
@@ -401,7 +385,6 @@ function afficherMessageQR(message, type) {
     }, 5000);
 }
 
-// Fonctions d'alerte compatibilité (redirigent vers afficherMessageQR)
 function showSuccessAlert(message) {
     afficherMessageQR(message, 'success');
 }
@@ -410,7 +393,7 @@ function showErrorAlert(message) {
     afficherMessageQR(message, 'danger');
 }
 
-// Initialisation
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'flex';
 });

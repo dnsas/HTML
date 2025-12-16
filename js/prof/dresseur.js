@@ -1,12 +1,4 @@
-/* /js/prof/dresseur.js */
-
 /**
- * Fonction appelée par le bouton pour tourner la carte
- * Elle cherche le parent .flip-card-inner et toggle la classe .flipped
- */
-
-/**
- * Génère le HTML pour une carte Dresseur <-> Pokémon
  * @param {Object} data - Données SQL (pokemon_id, pokemon_nom, dresseur_id, dresseur_nom)
  * @returns {string} - HTML complet
  */

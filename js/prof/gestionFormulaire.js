@@ -1,6 +1,3 @@
-/** Comportements.js ******/
-
-// --- Configuration des couleurs par type ---
 const typeColor = {
     bug: "#26de81",
     dragon: "#ffeaa7",
@@ -18,10 +15,10 @@ const typeColor = {
     psychic: "#a29bfe",
     rock: "#2d3436",
     water: "#0190FF",
-    default: "#eff3ff" // Couleur par défaut
+    default: "#eff3ff"
 };
 
-// Fonction pour traduire les types de votre BDD (Français) vers les clés CSS (Anglais)
+
 function mapTypeToColorKey(frenchType) {
     if (!frenchType) return "default";
     const map = {
@@ -47,13 +44,13 @@ function mapTypeToColorKey(frenchType) {
 }
 
 
-// --- Programme principal ---
+
 console.log("Exécution du programme javascript ");
 const formulaires = document.querySelectorAll('form');
 formulaires.forEach(unFormulaire => unFormulaire.addEventListener("submit", executerRequete));
 
 
-/*** Gestionnaire d'événement **/
+
 function executerRequete(evt) {
     console.log("Le formulaire a été validé");
     evt.preventDefault();
@@ -107,7 +104,7 @@ function afficherResultatsRequete(enregistrements) {
 
     enregistrements.forEach(function(data) {
 
-        // --- 1. DÉTECTION ÉVOLUTIONS ---
+
         if (data.BaseID && data.EvoID) {
             const carteContainer = document.createElement('div');
             carteContainer.className = 'flip-card-container';
@@ -116,7 +113,7 @@ function afficherResultatsRequete(enregistrements) {
             return;
         }
 
-        // --- 2. NOUVEAU : DÉTECTION DRESSEURS ---
+        // DÉTECTION DRESSEURS
         if (data.pokemon_id && data.dresseur_id) {
             const carteContainer = document.createElement('div');
             carteContainer.className = 'flip-card-container';
@@ -130,18 +127,18 @@ function afficherResultatsRequete(enregistrements) {
 
 
 
-        // --- 1. DÉTECTION SPECIALE : EST-CE UNE REQUETE D'EVOLUTION ? ---
+
         // On regarde si les colonnes spécifiques 'BaseID' et 'EvoID' existent
         if (data.BaseID && data.EvoID) {
             const carteContainer = document.createElement('div');
-            carteContainer.className = 'flip-card-container'; // Classe du fichier evolution.css
+            carteContainer.className = 'flip-card-container';
             // On appelle la fonction du fichier evolution.js
             carteContainer.innerHTML = genererCarteEvolutionHTML(data);
             conteneur.appendChild(carteContainer);
-            return; // On passe à l'enregistrement suivant, on ne fait pas le code standard
+            return;
         }
 
-        // --- 2. CODE STANDARD (POUR TOUTES LES AUTRES REQUETES) ---
+
         const id = data.id || data.ID || data.pokemon_id;
         const name = data.nom || data.NOM || data.libelle || "Inconnu";
         let typePrincipal = "Normal";

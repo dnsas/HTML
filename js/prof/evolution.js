@@ -1,19 +1,10 @@
-/* /js/prof/evolution.js - Version alternative */
-
-/**
- * Fonction appelée par le bouton pour tourner la carte
- */
 function basculerCarte(bouton) {
-    // Version simplifiée qui fonctionne avec les deux structures
     const carteInterieure = bouton.closest('.flip-card-inner');
     if (carteInterieure) {
         carteInterieure.classList.toggle('flipped');
     }
 }
 
-/**
- * Génère le HTML pour une carte à retourner
- */
 function genererCarteEvolutionHTML(data) {
     const baseUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
 

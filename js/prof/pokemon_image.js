@@ -1,7 +1,6 @@
-// Affichage des images Pokémon
 console.log("Chargement du module images Pokémon");
 
-// Surcharger la fonction d'affichage
+
 const originalAfficher = window.afficherResultatsRequete;
 window.afficherResultatsRequete = function(enregistrements) {
     originalAfficher.call(this, enregistrements);
@@ -16,7 +15,7 @@ function ajouterImagesPokemon() {
     tbody.querySelectorAll('tr').forEach(ligne => {
         const cellules = ligne.querySelectorAll('td');
 
-        // Chercher un ID numérique
+
         cellules.forEach(cellule => {
             const texte = cellule.textContent.trim();
             if (/^\d+$/.test(texte)) {

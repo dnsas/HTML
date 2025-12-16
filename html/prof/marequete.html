@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Pokédex</title>
+    <link rel="stylesheet" href="/css/commun.css">
     <link rel="stylesheet" href="/css/prof/styles.css">
     <script src="/js/prof/gestionFormulaireBase.js" defer></script>
-    <link rel="stylesheet" href="/css/commun.css">
+    <script src="https://kit.fontawesome.com/f79850fb33.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -23,13 +25,16 @@
     <h1>Ma reqûete</h1>
 
 
-    <!-- Formulaire pour taper ta propre requête -->
     <form class="formulairePourBDProf">
         <label for="requetePerso">Requête personnalisée :</label><br>
-        <textarea id="requete" name="requete" rows="4" cols="60" placeholder="Écris ta requête SQL ici..."></textarea>
-        <br>
+
+        <div class="input-box">
+            <input class="input-box" id="requete" name="requete" rows="4" cols="60" placeholder="Écris ta requête SQL ici...">
+        </div>
+
         <button type="submit">Exécuter ma requête</button>
     </form>
+
 
     <!-- Tableau de résultats -->
     <div class="affichageBD">
